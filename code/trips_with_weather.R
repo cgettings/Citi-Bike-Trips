@@ -15,7 +15,6 @@
 # Loading libraries ----
 #---------------------------------#
 
-
 library(mgcv)
 library(readr)
 library(tibble)
@@ -44,7 +43,6 @@ library(geosphere)
 library(ggrepel)
 library(tidyquant)
 library(TTR)
-
 
 #---------------------------------#
 # Loading functions 
