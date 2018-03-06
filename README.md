@@ -7,6 +7,6 @@ Trip data can be retrieved from Citi Bike [system data page](https://www.citibik
 
 **Tracking the most-used bike on 7/23/2017**
 
-<img src="https://github.com/cgettings/Citi-Bike-Trips/raw/master/plots/stops_timeline_animate_25.gif" height="750" />
+<img src="plots/stops_timeline_animate_25.gif" alt="stops_timeline_animate_25.gif" height="750" />
 
 ***To-Do:** Map trips using Google Maps' directions API*
