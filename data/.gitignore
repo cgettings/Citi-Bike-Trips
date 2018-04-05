@@ -7,3 +7,7 @@ citibike_trips may 2017 weekdays(2).RDS
 citibike_trips may 2017 weekdays.RDS
 citibike_trips_2016.rds
 bikes_weather.csv
+coord_df_comb_poly.rds
+coord_df_comb.rds
+coord_df_50.rds
+citibike_trip_db_chunk.sqlite3

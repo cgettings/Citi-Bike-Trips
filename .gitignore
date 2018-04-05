@@ -31,3 +31,24 @@ polyline_df.rds
 Non-Linear Time Series - Extreme Events and Integer Value Problems.pdf - Shortcut.lnk
 Time Series Analysis and Its Applications - With R Examples (4e).pdf - Shortcut.lnk
 Using R and lme_lmer to fit different two- and three-level longitudinal models - R Psychologist.pdf - Shortcut.lnk
+testing_osrm_parallel.R
+Rplot04.pdf
+Rplot03.pdf
+Rplot02.pdf
+Rplot01.pdf
+Rplot.pdf
+data/raw/201801_citibikejc_tripdata.csv.zip
+data/raw/201801_citibikenyc_tripdata.csv.zip
+data/raw/201802_citibikejc_tripdata.csv.zip
+data/raw/201802_citibikenyc_tripdata.csv.zip
+data/polyline_5_df.csv
+data/polyline_5_df.rds
+data/polyline_5_osrm_df.csv
+data/polyline_5_osrm_df.rds
+data/polyline_6_df.csv
+data/polyline_6_df.rds
+data/polyline_6_osrm_df.csv
+data/polyline_6_osrm_df.rds
+data/polyline_osrm_df.csv
+data/polyline_osrm_df.rds
+data/coord_df_com.rds

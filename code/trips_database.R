@@ -182,17 +182,17 @@ for (i in 1:nrow(trip_files.2)) {
     ## selecting missing hours ##
     
     
-    trip_unzip_0 <- 
-        trip_unzip %>% 
-        mutate(
-            start_time_hourly     = floor_date(start_time, "hours"),
-            start_time_hourly_num = as.numeric(start_time_hourly)
-        ) %>% 
-        inner_join(., missing_hours, by = "start_time_hourly_num")
-    
-    inner_join(trip_unzip_0, missing_hours, by = "start_time_hourly_num") %>% glimpse()
-    
-    missing_hours
+    # trip_unzip_0 <- 
+    #     trip_unzip %>% 
+    #     mutate(
+    #         start_time_hourly     = floor_date(start_time, "hours"),
+    #         start_time_hourly_num = as.numeric(start_time_hourly)
+    #     ) %>% 
+    #     inner_join(., missing_hours, by = "start_time_hourly_num")
+    # 
+    # inner_join(trip_unzip_0, missing_hours, by = "start_time_hourly_num") %>% glimpse()
+    # 
+    # missing_hours
     
     
     ## writing to database ##
