@@ -1,3 +1,5 @@
+#######################################
+
 library(jsonlite)
 library(lubridate)
 library(dplyr)
@@ -14,45 +16,22 @@ library(gepaf)
 library(dbplyr)
 library(rstudioapi)
 library(iterators)
-library(doSNOW)
+# library(doSNOW)
+# library(Rmpi)
 
-setwd("D:/Files/BASP/R analyses/Bike Share/NYC - Citi Bike/Trip Data/")
-
-#######################################
-
-# "https://maps.googleapis.com/maps/api/directions/json?origin=Toronto&destination=Montreal&avoid=highways&mode=bicycling&key=YOUR_API_KEY"
-
-
-json_response <-
-    read_json(
-        glue_data(
-            trips_6[1,],
-            "https://maps.googleapis.com/maps/api/directions/",
-            "json?",
-            "origin={start_station_latitude},{start_station_longitude}&",
-            "destination={end_station_latitude},{end_station_longitude}&",
-            "mode=bicycling&",
-            "key=AIzaSyAOIqOIOJnrGVcjhPkSjCr6EwVSvRJAAvo"
-        ),
-        simplifyVector = TRUE
-    ) %>%
-    extract2("routes") %>%
-    pull(overview_polyline) %>%
-    select(polyline = points)
-
-
+# setwd("D:/Files/BASP/R analyses/Bike Share/NYC - Citi Bike/Trip Data/")
 
 #######################################
 
-cl <- makeSOCKcluster(3)
-registerDoSNOW(cl)
+# cl <- makeMPIcluster(2)
+# registerDoSNOW(cl)
 
-stopCluster(cl)
+# stopCluster(cl)
 
 #######################################
 
-citibike_trip_db <- dbConnect(RSQLite::SQLite(), "data/citibike_trip_db.sqlite3")
-citibike_trip_db_chunk <- dbConnect(RSQLite::SQLite(), "data/citibike_trip_db_chunk.sqlite3")
+citibike_trip_db       <- dbConnect(RSQLite::SQLite(), "./data/citibike_trip_db.sqlite3")
+citibike_trip_db_chunk <- dbConnect(RSQLite::SQLite(), "./data/citibike_trip_db_chunk.sqlite3")
 
 #######################################
 
@@ -97,7 +76,10 @@ get_local_route_possibly <- possibly(.f = get_local_route, otherwise = tibble())
 i_inf <- icount()
 # indexes <- data.frame()
 
-res <- dbSendQuery(citibike_trip_db, "SELECT * FROM citibike_trips")
+res <- 
+    dbSendQuery(
+        citibike_trip_db, 
+        "SELECT * FROM citibike_trips WHERE month IN (2,3,4) AND year = 2018")
 
 ####
 
@@ -108,7 +90,7 @@ while (!dbHasCompleted(res)) {
     
     # start_time <- now()
     
-    chunk <- dbFetch(res, n = 10000)
+    chunk <- dbFetch(res, n = 200000)
     
     ###-####-####-####-####-####-####-####-###
     
@@ -118,17 +100,17 @@ while (!dbHasCompleted(res)) {
         plyr::adply(
             .data = .,
             .margins = 1,
-            .parallel = TRUE,
-            .paropts = list(
-                .packages = c("dplyr",
-                              "glue",
-                              "jsonlite",
-                              "magrittr",
-                              "purrr"),
+            # .parallel = TRUE,
+            # .paropts = list(
+            #     .packages = c("dplyr",
+            #                   "glue",
+            #                   "jsonlite",
+            #                   "magrittr",
+            #                   "purrr"),
                 # .export = "port",
-                .errorhandling = "pass",
-                .verbose = FALSE
-            ),
+            #     .errorhandling = "pass",
+            #     .verbose = FALSE
+            # ),
             .fun = get_local_route_possibly
         ) %>%
         as_tibble()
@@ -150,6 +132,8 @@ while (!dbHasCompleted(res)) {
 }
 
 #######################################
+
+dbClearResult(res)
 
 terminalKill(terminalList())
 

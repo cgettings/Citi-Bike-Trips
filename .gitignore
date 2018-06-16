@@ -52,3 +52,7 @@ data/polyline_6_osrm_df.rds
 data/polyline_osrm_df.csv
 data/polyline_osrm_df.rds
 data/coord_df_com.rds
+*.dat
+data/raw/201803_capitalbikeshare_tripdata.csv.zip
+data/raw/201803_citibikejc_tripdata.csv.zip
+data/raw/201803_citibikenyc_tripdata.csv.zip

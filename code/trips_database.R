@@ -6,7 +6,6 @@
 ##################################################-
 ##################################################-
 
-
 #========================================#
 # Setting up ----
 #========================================#
@@ -14,7 +13,6 @@
 #---------------------------------#
 # Loading libraries ----
 #---------------------------------#
-
 
 library(readr)
 library(tibble)
@@ -40,12 +38,14 @@ library(ggforce)
 library(dplyr)
 library(geosphere)
 library(ggrepel)
+library(RSQLite)
 
 #---------------------------------#
 # Initializing database
 #---------------------------------#
 
-citibike_trip_db <- dbConnect(RSQLite::SQLite(), "./data/citibike_trip_db.sqlite3")
+# citibike_trip_db <- dbConnect(SQLite(), "./data/citibike_trip_db_chunk.sqlite3")
+citibike_trip_db <- dbConnect(SQLite(), "./data/citibike_trip_db.sqlite3")
 
 
 #========================================#
@@ -105,7 +105,8 @@ trip_files.2 <-
     .[str_detect(., "\\.zip")] %>% 
     # .[str_detect(., regex(file_dates, ignore_case = TRUE))] %>% 
     .[!str_detect(., "JC-")] %>% 
-    data_frame(trip_files = .)
+    data_frame(trip_files = .) %>% 
+    filter(str_detect(trip_files, regex(pattern = "201805")))
 
 
 #====================================================#
@@ -138,8 +139,9 @@ for (i in 1:nrow(trip_files.2)) {
         read_csv(
             paste0(
                 "./data/raw/Unzipped/", 
-                trip_csv),
-            col_types = "iccicddicddicci") %>%
+                trip_csv)
+            # col_types = "iccicddicddicci"
+            ) %>%
         `attr<-`("problems", NULL) %>% 
         
         as_tibble() %>% 
