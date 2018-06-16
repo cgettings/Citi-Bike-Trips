@@ -56,3 +56,8 @@ data/coord_df_com.rds
 data/raw/201803_capitalbikeshare_tripdata.csv.zip
 data/raw/201803_citibikejc_tripdata.csv.zip
 data/raw/201803_citibikenyc_tripdata.csv.zip
+*.zip
+data/march_april_may/april_trips.rds
+data/march_april_may/april_trips_hourly.rds
+data/march_april_may/april_trips_hourly_count.rds
+data/march_april_may/april_trips_hourly_duration.rds
