@@ -39,9 +39,10 @@ The function takes as arguments the fitted model object (`fit`, class `merMod`) 
 
 The model fitted in [`code/modeling_station_traffic.R`](code/modeling_station_traffic.R) is plotted in [`plots/time_series/trwx_fit_plot.png`](plots/time_series/trwx_fit_plot.png).
 
-<img src="plots/time_series/trwx_fit_plot.png" alt="trwx_fit_plot.png" height=600 width=1800 />  
+Here is what it looks like:  
 
-*Image source:* [plots/time_series/trwx_fit_plot.png](plots/time_series/trwx_fit_plot.png)
+<img src="plots/time_series/trwx_fit_plot.png" alt="trwx_fit_plot.png">  
+
 
 ## Other visualizations
 
@@ -49,8 +50,6 @@ The model fitted in [`code/modeling_station_traffic.R`](code/modeling_station_tr
 
 The highlighted area on the timeline spans a trip's start time and end time. The relative width of the arrow corresponds to the relative duration of that trip.
 
-<img src="plots/stops_timeline_animate_25.gif" alt="stops_timeline_animate_25.gif" height="750" />  
-
-*Image source:* [plots/stops_timeline_animate_25.gif](plots/stops_timeline_animate_25.gif)
+<img src="plots/stops_timeline_animate_25.gif" alt="stops_timeline_animate_25.gif" height="750">  
 
 ***To-do:** Visualize projected routes for each trip using the [OSRM API](http://project-osrm.org/)*
