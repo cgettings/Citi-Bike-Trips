@@ -1,9 +1,11 @@
 # NYC Citi Bike Trips
-Some code and data from a project looking at citi bike trips in NYC 
+Project exploring Citi Bike trips in New York City
 
 Trip data can be retrieved from the Citi Bike [system data page](https://www.citibikenyc.com/system-data) (or from the [AWS data repository](https://s3.amazonaws.com/tripdata/index.html)).
 
 ## Building a model of Citi Bike trips for March, April & May of 2018
+
+This repository contains the code needed to fit a linear mixed effects model to Citi Bike trip data, starting from raw data files.
 
 **In [`code/trips_database.R`](code/trips_database.R)**
 * Code for creating a SQLite database of Citi Bike trip histories extracted from .zip files downloaded from the links above.
@@ -25,7 +27,7 @@ Trip data can be retrieved from the Citi Bike [system data page](https://www.cit
   * Combines the hourly summaries of trips and weather conditions into one data file, called [`data/march_april_may/trips_station_weather_data.rds`](data/march_april_may/trips_station_weather_data.rds).
 
 **In [`code/modeling_station_traffic.R`](code/modeling_station_traffic.R)**
-* Code for fitting a linear mixed effects model with `lme4::lmer()` to station-level time series data extracted from [`data/march_april_may/trips_station_weather_data.rds`](data/march_april_may/trips_station_weather_data.rds)
+* Code for fitting a linear mixed effects model with `lme4::lmer()` to station-level time series data from [`data/march_april_may/trips_station_weather_data.rds`](data/march_april_may/trips_station_weather_data.rds)
 * Code for visualizing the fit of this model, using a function defined in [`code/functions/ts_fitted_plot_stations.R`](code/functions/ts_fitted_plot_stations.R)
 
 This function:
@@ -39,16 +41,17 @@ The function takes as arguments the fitted model object (`fit`, class `merMod`) 
 
 The model fitted in [`code/modeling_station_traffic.R`](code/modeling_station_traffic.R) is plotted in [`plots/time_series/trwx_fit_plot.png`](plots/time_series/trwx_fit_plot.png).
 
-Here is what it looks like:  
+**Here is what it looks like:**  
 
 <img src="plots/time_series/trwx_fit_plot.png" alt="trwx_fit_plot.png">  
 
-
 ## Other visualizations
 
-### Tracking the most-used bike on 7/23/2017:
+### Tracking the most-used bike on 7/13/2017:
 
-The highlighted area on the timeline spans a trip's start time and end time. The relative width of the arrow corresponds to the relative duration of that trip.
+This is an animated GIF tracking a single bike around NYC. This bike was used for 40 separate trips on Thursday, July 13th 2017.
+
+This bike was picked up on the Lower East Side at 6:25 AM and dropped off for the final time on the Upper West Side at 11:40 PM. The highlighted area on the timeline spans a trip's start time and end time. The relative width of the arrow corresponds to the relative duration of that trip.
 
 <img src="plots/stops_timeline_animate_25.gif" alt="stops_timeline_animate_25.gif" height="750">  
 
