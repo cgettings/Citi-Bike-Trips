@@ -51,7 +51,7 @@ The model fitted in [`code/modeling_station_traffic.R`](code/modeling_station_tr
 
 This is an animated GIF tracking a single bike around NYC. This bike was used for 40 separate trips on Thursday, July 13th 2017.
 
-This bike was picked up on the Lower East Side at 6:25 AM and dropped off for the final time on the Upper West Side at 11:40 PM. The highlighted area on the timeline spans a trip's start time and end time. The relative width of the arrow corresponds to the relative duration of that trip.
+This bike was picked up in the East Village at 6:25 AM and dropped off for the final time on the Upper West Side at 11:40 PM. The highlighted area on the timeline spans a trip's start time and end time. The relative width of the arrow corresponds to the relative duration of that trip.
 
 <img src="plots/stops_timeline_animate_25.gif" alt="stops_timeline_animate_25.gif" height="750">  
 
