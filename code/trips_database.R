@@ -1,138 +1,74 @@
-##################################################-
-##################################################-
+############################################################-
+############################################################-
 ##
-## Creating Citi bike trips database ----
+## Creating Citi Bike trips database ----
 ##
-##################################################-
-##################################################-
+############################################################-
+############################################################-
 
-#========================================#
+#===========================================================#
 # Setting up ----
-#========================================#
+#===========================================================#
 
-#---------------------------------#
+#-----------------------------------------------------------#
 # Loading libraries ----
-#---------------------------------#
+#-----------------------------------------------------------#
 
-library(readr)
-library(tibble)
+library(tidyverse)
 library(lubridate)
 library(DBI)
-library(stringr)
-library(ggplot2)
-library(ggthemes)
-library(viridis)
-library(maps)
-library(ggmap)
-library(maptools)
-library(rgeos)
-library(rgdal)
-library(RColorBrewer)
-library(magrittr)
-library(dplyr)
 library(dbplyr)
-library(scales)
-library(broom)
-library(sf)
-library(ggforce)
-library(dplyr)
-library(geosphere)
-library(ggrepel)
+library(magrittr)
 library(RSQLite)
 
-#---------------------------------#
-# Initializing database
-#---------------------------------#
 
-# citibike_trip_db <- dbConnect(SQLite(), "./data/citibike_trip_db_chunk.sqlite3")
+#-----------------------------------------------------------#
+# Connecting to database
+#-----------------------------------------------------------#
+
 citibike_trip_db <- dbConnect(SQLite(), "./data/citibike_trip_db.sqlite3")
 
 
-#========================================#
-# Finding missing dates and times ----
-#========================================#
-
-
-# all_hours <-
-#     data_frame(
-#         start_time_hourly =
-#             seq(
-#                 as_datetime("2017-01-01 00:00:00", tz = "US/Eastern"),
-#                 as_datetime("2017-12-31 23:00:00", tz = "US/Eastern"),
-#                 "hour"
-#             ))
-# 
-# 
-# missing_hours <- 
-#     tbl(citibike_trip_db, "citibike_trips") %>%
-#     filter(year == 2017) %>%
-#     select(start_time) %>%
-#     collect() %>%
-#     mutate(
-#         start_time            = as_datetime(start_time, tz = "US/Eastern"),
-#         start_time_hourly     = floor_date(start_time, "hours")
-#     ) %>% 
-#     count(start_time_hourly) %>% 
-#     left_join(all_hours, .) %>% 
-#     filter(is.na(n)) %>% 
-#     mutate(start_time_hourly_num = as.numeric(start_time_hourly))
-# 
-# 
-# missing_months <- 
-#     missing_hours %>% 
-#     mutate(
-#         start_time_month = floor_date(start_time_hourly, "months") %>% 
-#             as_date() %>% 
-#             format.Date(x = ., format = "%Y%m")
-#     ) %>% 
-#     distinct(start_time_month)
-
-
-#====================================================#
+#===========================================================#
 # Getting data frame of file names to extract ----
-#====================================================#
+#===========================================================#
 
+trip_files_all <- list.files("./data/raw/", full.names = TRUE)
 
-# file_dates <- 
-#     missing_months %>% 
-#     pull(start_time_month) %>% 
-#     str_c(., collapse = "|")
-
-trip_files <- list.files("./data/raw/", full.names = TRUE)
-
-trip_files.2 <- 
-    trip_files %>% 
+trip_files_extract <- 
+    trip_files_all %>% 
     .[str_detect(., "\\.zip")] %>% 
-    # .[str_detect(., regex(file_dates, ignore_case = TRUE))] %>% 
     .[!str_detect(., "JC-")] %>% 
-    data_frame(trip_files = .) %>% 
-    filter(str_detect(trip_files, regex(pattern = "201805")))
+    data_frame(files = .) %>% 
+    filter(str_detect(files, regex(pattern = "201806")))
 
 
-#====================================================#
+#===========================================================#
 # Extracting trip data and saving to database ----
-#====================================================#
+#===========================================================#
 
-
-for (i in 1:nrow(trip_files.2)) {
+for (i in 1:nrow(trip_files_extract)) {
     
-    
-    ### Unzipping station files ###
+    #-----------------------------------------------------------#
+    # Unzipping station files
+    #-----------------------------------------------------------#
     
     trip_csv <- 
         unzip(
-            zipfile = trip_files.2$trip_files[i],
+            zipfile = trip_files_extract$files[i],
             list = TRUE,
             exdir = "./data/raw/Unzipped") %>%
         extract2("Name")
     
     unzip(
-        zipfile = trip_files.2$trip_files[i],
+        zipfile = trip_files_extract$files[i],
         exdir = "./data/raw/Unzipped"
     )
     
     
-    ## cleaning the data ##
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+    # cleaning the data
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
     
     trip_unzip <- 
         
@@ -181,23 +117,9 @@ for (i in 1:nrow(trip_files.2)) {
         )
     
     
-    ## selecting missing hours ##
-    
-    
-    # trip_unzip_0 <- 
-    #     trip_unzip %>% 
-    #     mutate(
-    #         start_time_hourly     = floor_date(start_time, "hours"),
-    #         start_time_hourly_num = as.numeric(start_time_hourly)
-    #     ) %>% 
-    #     inner_join(., missing_hours, by = "start_time_hourly_num")
-    # 
-    # inner_join(trip_unzip_0, missing_hours, by = "start_time_hourly_num") %>% glimpse()
-    # 
-    # missing_hours
-    
-    
-    ## writing to database ##
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+    # writing to database
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
     
     dbWriteTable(
         citibike_trip_db,
@@ -208,7 +130,9 @@ for (i in 1:nrow(trip_files.2)) {
     )
     
     
-    ### Print some pretty details of your progress ###
+    #-----------------------------------------------------------#
+    # Print some pretty details of your progress
+    #-----------------------------------------------------------#
     
     cat("===============================\n")
     cat("Loop", i, "\n")
@@ -221,11 +145,17 @@ for (i in 1:nrow(trip_files.2)) {
     cat(" --|")
     cat("\n-------------------------------\n")  
     
-    ## removing the previous data from memory to avoid duplicates ##
+    
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+    # removing the previous data from memory to avoid duplicates
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
     
     rm(trip_unzip)
     
-    ## removing the unzipped files ##
+    
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+    # removing the unzipped files
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
     
     file.remove(paste0("./data/raw/Unzipped/", trip_csv))
     
@@ -234,9 +164,9 @@ for (i in 1:nrow(trip_files.2)) {
 }
 
 
-#---------------------------------#
-# ---- Creating indexes ----
-#---------------------------------#
+#-----------------------------------------------------------#
+# Creating indexes ----
+#-----------------------------------------------------------#
 
 db_create_index(citibike_trip_db, "citibike_trips", "year")
 db_create_index(citibike_trip_db, "citibike_trips", "month")
@@ -250,13 +180,25 @@ db_create_index(citibike_trip_db, "citibike_trips", "gender")
 
 db_list_tables(citibike_trip_db)
 
-### Checking indexes ### 
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# checking indexes
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 
 dbGetQuery(citibike_trip_db, "SELECT * FROM sqlite_master WHERE type = 'index'")
 
-#######################
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# disconnecting from database
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 
 dbDisconnect(citibike_trip_db)
 
-############################################################
-############################################################
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# #
+# #             ---- THIS IS THE END ----
+# #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
