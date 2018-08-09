@@ -41,9 +41,14 @@ The function takes as arguments the fitted model object (`fit`, class `merMod`) 
 
 The model fitted in [`code/modeling_station_traffic.R`](code/modeling_station_traffic.R) is plotted in [`plots/time_series/trwx_fit_plot.png`](plots/time_series/trwx_fit_plot.png).
 
+
 **Here is what it looks like:**  
 
 <img src="plots/time_series/trwx_fit_plot.png" alt="trwx_fit_plot.png">  
+
+***To-do:***
+* *Extend the time range of the modeled data*
+* *Add data on end stations, add "start vs. end" predictor to model*
 
 ## Other visualizations
 
