@@ -44,7 +44,7 @@ The model fitted in [`code/modeling_station_traffic.R`](code/modeling_station_tr
 
 **Here is what it looks like:**  
 
-<img src="../plots/time_series/trwx_fit_plot.png" alt="trwx_fit_plot.png">  
+<img src="plots/time_series/trwx_fit_plot.png" alt="trwx_fit_plot.png">  
 
 ***To-do:***
 * *Extend the time range of the modeled data*
