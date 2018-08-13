@@ -58,7 +58,7 @@ This is an animated GIF tracking a single bike around NYC. This bike was used fo
 
 This bike was picked up in the East Village at 6:25 AM and dropped off for the final time on the Upper West Side at 11:40 PM. The highlighted area on the timeline spans a trip's start time and end time. The relative width of the arrow corresponds to the relative duration of that trip.
 
-<iframe src="https://cgettings.github.io/Citi-Bike-Trips/docs/one_bike_frames.html" style="border:1px solid red;" height="700" width="100%"> 
+<iframe src="https://cgettings.github.io/Citi-Bike-Trips/docs/one_bike_frames.html" style="border:1px solid red;" height="750" width="100%"> 
 </iframe>
 
 ***To-do:** Visualize projected routes for each trip using the [OSRM API](http://project-osrm.org/)*
