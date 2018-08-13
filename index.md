@@ -54,9 +54,11 @@ The model fitted in [`code/modeling_station_traffic.R`](code/modeling_station_tr
 
 ### Tracking the most-used bike on 7/13/2017:
 
-This is an animated GIF tracking a single bike around NYC. This bike was used for 40 separate trips on Thursday, July 13th 2017.
+This is a graphic following a single bike around NYC for one day. 
 
-This bike was picked up in the East Village at 6:25 AM and dropped off for the final time on the Upper West Side at 11:40 PM. The highlighted area on the timeline spans a trip's start time and end time. The relative width of the arrow corresponds to the relative duration of that trip.
+This bike was used for 40 separate trips on Thursday, July 13th 2017. It bike was picked up in the East Village at 6:25 AM and dropped off for the final time on the Upper West Side at 11:40 PM. The highlighted area on the timeline spans a trip's start time and end time. The relative width of the arrow corresponds to the relative duration of that trip.
+
+Most of the trips taken on this bike were between stations in midtown, with clusters during the AM and PM rush hours.
 
 <iframe src="https://cgettings.github.io/Citi-Bike-Trips/docs/one_bike_frames.html" style="border:none; background:none" height="750" width="90%"> 
 </iframe>
