@@ -14,27 +14,24 @@
 # Loading libraries ----
 #---------------------------------#
 
-
 library(jsonlite)
+library(tidyverse)
 library(lubridate)
-library(dplyr)
-library(tibble)
-library(readr)
-library(purrr)
 library(DBI)
-library(tidyr)
 library(magrittr)
 library(glue)
-library(rvest)
-library(stringr)
 library(gepaf)
-library(dbplyr)
 library(V8)
 library(httr)
 library(countyweather)
 library(rnoaa)
 library(weathermetrics)
 
+#---------------------------------#
+# Connecting to database ----
+#---------------------------------#
+
+nyc_weather_db <- dbConnect(SQLite(), "./data/nyc_weather_db.sqlite3")
 
 #---------------------------------#
 # General parameters ----
@@ -49,31 +46,31 @@ noaa_token <- read_lines("./noaa_token.txt")
 ## Downloading ----
 #========================================#
 
-
 ### Load tbl of NOAA ISD/ISH stations ###
 
-stations_tbl <- isd_stations(refresh = FALSE)
+stations_tbl <- isd_stations(refresh = TRUE)
 
 
 ### Selecting Central Park station ###
 
 central_park_station <- 
     stations_tbl %>% 
-    filter(icao == "KNYC" & str_sub(end, 1, 4) == 2018) %>% 
+    filter(icao == "KNYC" & str_sub(end, 1, 4) == 2018) %>%
     mutate(station_code = str_c(usaf, wban))
 
 station_code <- central_park_station %>% pull(station_code)
 
+
 #---------------------------------------#
-# Getting data from selected cities ----
+# Getting data for selected dates ----
 #---------------------------------------#
 
 ### Specify the time and date range ###
 
-start_date <- as_date("2016/01/01") %>% format("%Y-%m-%d")
+start_date <- as_date("2013/01/01") %>% format("%Y-%m-%d")
 start_time <- "00:00:00"
 start_offset <- "-05" # Time zone
-end_date <- as_date("2016/12/31") %>% format("%Y-%m-%d")
+end_date <- today() %>% format("%Y-%m-%d")
 end_time <- "23:59:59"
 end_offset <- "-05" # Time zone
 

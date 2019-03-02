@@ -43,6 +43,7 @@ library(tidyr)
 library(DBI)
 library(dbplyr)
 library(foreach)
+library(glue)
 
 # extrafont::loadfonts("win")
 
@@ -1028,6 +1029,19 @@ system.time(
 #     
 # )
 
+
+################################################
+################################################
+
+stops_timeline_animate <- image_read("plots/stops_timeline_animate_25.gif")
+
+foreach(i = 1:length(stops_timeline_animate)) %do%
+    
+    image_write(
+        stops_timeline_animate[i],
+        path = glue("plots/one_bike_frames/stops_timeline_animate_{i}.png"), 
+        format = "png"
+    )
 
 ################################################
 ################################################

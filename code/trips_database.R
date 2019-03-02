@@ -50,6 +50,14 @@ trip_files_extract <-
 for (i in 1:nrow(trip_files_extract)) {
     
     #-----------------------------------------------------------#
+    # Print some pretty details of your progress
+    #-----------------------------------------------------------#
+    
+    cat("===============================\n")
+    cat("Loop", i, "\n")
+    cat(trip_files_extract$files[i], "\n")
+    
+    #-----------------------------------------------------------#
     # Unzipping station files
     #-----------------------------------------------------------#
     
@@ -186,6 +194,13 @@ db_list_tables(citibike_trip_db)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 
 dbGetQuery(citibike_trip_db, "SELECT * FROM sqlite_master WHERE type = 'index'")
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# tidying up
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+
+dbExecute(citibike_trip_db, "VACUUM")
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
