@@ -29,15 +29,13 @@ This repository contains the code needed to fit a linear mixed effects model to 
 **In [`code/modeling_station_traffic.R`](code/modeling_station_traffic.R):**
 * Code for fitting a linear mixed effects model with `lme4::lmer()` to station-level time series data from [`data/march_april_may/trips_station_weather_data.rds`](data/march_april_may/trips_station_weather_data.rds)
 * Code for visualizing the fit of this model, using a function defined in [`code/functions/ts_fitted_plot_stations.R`](code/functions/ts_fitted_plot_stations.R)
+    * This function plots the model's fitted values and observed data over time. 
+      * *Date* is plotted on the x-axis, and *Total hourly trips* is plotted on the y-axis.
+      * *Total hourly trips* is computed by summing trips (observed or fitted) across stations for each hour.
 
-This function:
-* Plots the model's fitted values and observed data over time. 
-  * *Date* is plotted on the x-axis, and *Total hourly trips* is plotted on the y-axis.
-  * *Total hourly trips* is computed by summing trips (observed or fitted) across stations for each hour.
-
-The function takes as arguments the fitted model object (`fit`, class `merMod`) and the data used for the fit (`data`). It saves the resulting plot to the current working directory (`save = TRUE`, the default) or displays it on the plot device (`save = FALSE`), and if `return.aug = TRUE` (the default) optionally returns two data frames:
-* `df_augment`: the augmented station-level data (produced by `broom::augment()`)
-* `df_augment_sum`: the hourly summaries of observed and fitted trips used to produce the plot
+    * The function takes as arguments the fitted model object (`fit`, class `merMod`) and the data used for the fit (`data`). It saves the resulting plot to the current working directory (`save = TRUE`, the default) or displays it on the plot device (`save = FALSE`), and if `return.aug = TRUE` (the default) optionally returns two data frames:
+      * `df_augment`: the augmented station-level data (produced by `broom::augment()`)
+      * `df_augment_sum`: the hourly summaries of observed and fitted trips used to produce the plot
 
 The model fitted in [`code/modeling_station_traffic.R`](code/modeling_station_traffic.R) is plotted in [`plots/time_series/trwx_fit_plot.png`](plots/time_series/trwx_fit_plot.png).
 
