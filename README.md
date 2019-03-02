@@ -7,16 +7,16 @@ Trip data can be retrieved from the Citi Bike [system data page](https://www.cit
 
 This repository contains the code needed to fit a linear mixed effects model to Citi Bike trip data, starting from raw data files.
 
-**In [`code/trips_database.R`](code/trips_database.R)**
+**In [`code/trips_database.R`](code/trips_database.R):**
 * Code for creating a SQLite database of Citi Bike trip histories extracted from .zip files downloaded from the links above.
 
-**In [`code/building_nyc_weather_database.R`](code/building_nyc_weather_database.R)**
+**In [`code/building_nyc_weather_database.R`](code/building_nyc_weather_database.R):**
 * Code for creating a database of NYC-area weather, containing:
   * Standard hourly metrics from [NOAA's weather data API](https://www.ncdc.noaa.gov/)
   * UV data at daily resolution from [ESA's TEMIS project](http://www.temis.nl/uvradiation/UVarchive/stations_uv.html)
   * UV data at 3-minute resolution from [Colorado State's UV-B Monitoring and Research Program, Natural Resource Ecology Laboratory](https://uvb.nrel.colostate.edu/UVB/da_UvIndex.jsf) (recorded in Geneva, NY)
 
-**In [`code/creating_trips_station_weather_data.R`](code/creating_trips_station_weather_data.R)**
+**In [`code/creating_trips_station_weather_data.R`](code/creating_trips_station_weather_data.R):**
 * Code for creating a data file combining trip data and weather data spanning March - May of 2018.  
   This code:  
   * Extracts trip data from a database of trip histories ([`data/citibike_trip_db.sqlite3`](data/citibike_trip_db.sqlite3)), then produces hourly summaries of the number of trips started at each station, saved as [`data/march_april_may/trips_station_hourly.rds`](data/march_april_may/trips_station_hourly.rds). 
@@ -26,7 +26,7 @@ This repository contains the code needed to fit a linear mixed effects model to 
     * 3-minute resolution UV index data from table `three_min_uv`
   * Combines the hourly summaries of trips and weather conditions into one data file, called [`data/march_april_may/trips_station_weather_data.rds`](data/march_april_may/trips_station_weather_data.rds).
 
-**In [`code/modeling_station_traffic.R`](code/modeling_station_traffic.R)**
+**In [`code/modeling_station_traffic.R`](code/modeling_station_traffic.R):**
 * Code for fitting a linear mixed effects model with `lme4::lmer()` to station-level time series data from [`data/march_april_may/trips_station_weather_data.rds`](data/march_april_may/trips_station_weather_data.rds)
 * Code for visualizing the fit of this model, using a function defined in [`code/functions/ts_fitted_plot_stations.R`](code/functions/ts_fitted_plot_stations.R)
 
