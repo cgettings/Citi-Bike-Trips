@@ -5,7 +5,7 @@ Trip data can be retrieved from the Citi Bike [system data page](https://www.cit
 
 ## Building a model of Citi Bike trips for March, April & May of 2018
 
-This repository contains the code needed to fit a linear mixed effects model to Citi Bike trip data, starting from raw data files.
+This repository contains the code needed to fit a generalized linear mixed effects model to Citi Bike trip data, starting from raw data files.
 
 **In [`code/trips_database.R`](code/trips_database.R):**
 * Code for creating a SQLite database of Citi Bike trip histories extracted from .zip files downloaded from the links above.
