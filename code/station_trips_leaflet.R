@@ -231,10 +231,14 @@ stations_plot_2
 stations_plot_3 <- 
     leaflet() %>%
     enableTileCaching() %>%
-    addTiles(
-        urlTemplate = "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
+    addProviderTiles(
+        provider = "CartoDB.DarkMatter",
         options = tileOptions(useCache = TRUE, crossOrigin = TRUE)
     ) %>% 
+    # addTiles(
+    #     urlTemplate = "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
+    #     options = tileOptions(useCache = TRUE, crossOrigin = TRUE)
+    # ) %>% 
     addCircleMarkers(
         data = station_info,
         group = "All stations",
@@ -314,6 +318,7 @@ for (i in 1:length(sample_stations)) {
                     "</div>"
                 ),
             labelOptions = labelOptions(textsize = "15px", opacity = .75)
+            # icon = list(iconUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Map_pin_icon_green.svg/30px-Map_pin_icon_green.svg.png")
         )
     
 }
@@ -341,7 +346,7 @@ stations_plot_3
 
 saveWidget(
     widget = stations_plot_3,
-    file = here("plots/stations_plot.html"),
+    file = here("docs/stations_plot.html"),
     selfcontained = TRUE,
     title = "Stations plot"
 )
