@@ -50,6 +50,10 @@ The model fitted in [`code/modeling_station_traffic.R`](code/modeling_station_tr
 
 ## Other visualizations
 
+### Plotting trip counts with `leaflet`
+
+<iframe src="https://cgettings.github.io/Citi-Bike-Trips/docs/stations_plot.html" style="border:none; background:none" height="750" width="100%"> </iframe>
+
 ### Tracking the most-used bike on 7/13/2017:
 
 This is a graphic following a single bike around NYC for one day. 
