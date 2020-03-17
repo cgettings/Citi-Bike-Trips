@@ -15,7 +15,7 @@ This map displays the top-10 start stations for citi bike trips taken in April o
 
 *_Relative to every other end station, for trips starting at each of the top-10 start stations._
 
-<iframe src="https://cgettings.github.io/Citi-Bike-Trips/docs/stations_plot.html" style="border:none; background:none" height="600" width="100%"> </iframe>
+<iframe src="https://cgettings.github.io/Citi-Bike-Trips/docs/stations_map.html" style="border:none; background:none" height="600" width="100%"> </iframe>
 
 ([`code`](/code/station_trips_leaflet.R))
 
