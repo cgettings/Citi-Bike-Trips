@@ -6,6 +6,12 @@
 ###########################################################################################-
 ###########################################################################################-
 
+# This script constructs a map of citibike trips in April 2019. The map displays the top-ten 
+#   origin stations for the month (i.e., most bikes taken out), and each of the destination
+#   stations for those trips.
+#   
+# The default layer displays each station in the system, along with its capacity.
+
 #=========================================================================================#
 # Setting up ----
 #=========================================================================================#
@@ -14,16 +20,20 @@
 # Loading libraries ----
 #-----------------------------------------------------------------------------------------#
 
+library(jsonlite)
 library(tidyverse)
 library(lubridate)
 library(DBI)
 library(RSQLite)
 library(dbplyr)
 library(leaflet)
+library(leaflet.extras)
 library(htmltools)
 library(htmlwidgets)
 library(here)
-library(leaflet.extras)
+library(glue)
+library(magick)
+library(viridis)
 
 #-----------------------------------------------------------------------------------------#
 # Connecting to database
@@ -38,6 +48,8 @@ citibike_trip_db <- dbConnect(SQLite(), "data/citibike_trip_db.sqlite3")
 #-----------------------------------------------------------------------------------------#
 # Trip data
 #-----------------------------------------------------------------------------------------#
+
+# Specifying year and month filters
 
 trips <-
     citibike_trip_db %>%
@@ -70,7 +82,7 @@ trips <-
 #-----------------------------------------------------------------------------------------#
 
 station_info <- 
-    jsonlite::fromJSON("https://gbfs.citibikenyc.com/gbfs/en/station_information.json")$data$stations %>% 
+    fromJSON("https://gbfs.citibikenyc.com/gbfs/en/station_information.json")$data$stations %>% 
     as_tibble() %>% 
     filter(short_name %>% str_detect("JC", negate = TRUE)) %>% 
     select(station_id, longitude = lon, latitude = lat, name, capacity) %>% 
@@ -78,11 +90,15 @@ station_info <-
     mutate(capacity = na_if(capacity, 0)) %>% 
     arrange(-latitude)
 
-#=========================================================================================#
-# Summarizing trips by station ----
-#=========================================================================================#
+#-----------------------------------------------------------------------------------------#
+# Summarizing trips
+#-----------------------------------------------------------------------------------------#
 
-trips_count <- 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# By start and end station
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+
+trips_count_start_end <- 
     trips %>% 
     count(
         start_station_id,
@@ -98,147 +114,107 @@ trips_count <-
     arrange(start_station_longitude)
 
 
-#########################################################################################
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# By start station
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 
-viridis_pal <- colorNumeric("inferno", station_info$capacity)
-
-stations_plot <- 
-    leaflet() %>%
-    enableTileCaching() %>%
-    addTiles(
-        urlTemplate = "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
-        options = tileOptions(useCache = TRUE, crossOrigin = TRUE)
+trips_count_start <-
+    trips %>%
+    count(
+        start_station_id,
+        start_station_name,
+        start_station_longitude,
+        start_station_latitude,
+        name = "trips"
     ) %>% 
-    addCircleMarkers(
-        data = station_info,
-        group = "stations",
-        lng = ~ longitude,
-        lat = ~ latitude,
-        label = ~ name,
-        radius = 8,
-        stroke = TRUE,
-        weight = 1,
-        opacity = 1,
-        fillOpacity = .9,
-        color = ~ viridis_pal(capacity),
-        popup = 
-            ~ paste(
-                "<div style='font-size:15px'>", 
-                "<b>", name, "</b>", 
-                "<br/>", 
-                "<i>", "Capacity:", capacity, "</i>",
-                "</div>"
-            ),
-        options = markerOptions(),
-        labelOptions = labelOptions(textsize = "15px", opacity = .75)
-    ) %>% 
-    addLegend(
-        data = station_info,
-        pal = viridis_pal,
-        position = "bottomright",
-        values = ~ capacity,
-        group = "stations",
-        opacity = 1,
-        title = "Capacity"
-    ) %>% 
-    addLayersControl(
-        overlayGroups = c("stations"), 
-        options = layersControlOptions(collapsed = FALSE)
-    )
-   
-stations_plot
+    arrange(-trips)
 
-#########################################################################################
 
-save_html(stations_plot, file = here("plots/stations_plot.html"))
+#-----------------------------------------------------------------------------------------#
+# Pulling out top-10 origin stations
+#-----------------------------------------------------------------------------------------#
 
-#########################################################################################
-#########################################################################################
-#########################################################################################
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# Extracting top-10
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 
-viridis_pal <- colorNumeric("inferno", station_info$capacity)
+top_10_stations <- 
+    trips_count_start %>% 
+    slice(1:10)
 
-stations_plot_2 <- 
-    leaflet() %>%
-    enableTileCaching() %>%
-    addTiles(
-        urlTemplate = "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
-        options = tileOptions(useCache = TRUE, crossOrigin = TRUE)
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# Subsetting top-10
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+
+trips_count_start_end_top_10 <- 
+    trips_count_start_end %>% 
+    filter(start_station_name %in% !!top_10_stations$start_station_name)
+
+
+#=========================================================================================#
+# Building the map ----
+#=========================================================================================#
+
+#-----------------------------------------------------------------------------------------#
+# Custom map marker
+#-----------------------------------------------------------------------------------------#
+
+# Reading in SVG image
+
+map_marker <- 
+    image_read_svg(
+        "https://upload.wikimedia.org/wikipedia/commons/9/92/Ic_location_on_48px.svg",
+        width = 300
     )
 
-#########################################################################################
+# citibike light blue color
 
-sample_stations <- station_info %>% head(50)
+map_marker_red <-
+    image_fill(
+        image = map_marker,
+        color = "red",
+        point = "+150+50", 
+        fuzz = 0
+        # refcolor = "black"
+    )
 
-for (i in 1:nrow(sample_stations)) {
+# Saving modified marker
+
+image_write(map_marker_red, "map_marker_red.svg", format = "svg")
+
+# Turning the marker image into a leaflet marker icon
+
+marker_icon <- 
+    makeIcon(
+        iconUrl = "map_marker_red.svg",
+        iconWidth = 50,
+        iconAnchorX = 25,
+        iconAnchorY = 50
+    )
+
+
+#-----------------------------------------------------------------------------------------#
+# Constructing map ----
+#-----------------------------------------------------------------------------------------#
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# Base map
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+
+stations_map <- 
     
-    stations_plot_2 <- 
-        stations_plot_2 %>% 
-        addCircleMarkers(
-            data = sample_stations[i,],
-            group = sample_stations$name[i],
-            lng = ~ longitude,
-            lat = ~ latitude,
-            label = ~ name,
-            radius = 8,
-            stroke = TRUE,
-            weight = 1,
-            opacity = 1,
-            fillOpacity = .9,
-            color = ~ viridis_pal(capacity),
-            popup = 
-                ~ paste(
-                    "<div style='font-size:15px'>", 
-                    "<b>", name, "</b>", 
-                    "<br/>", 
-                    "Capacity:", capacity,
-                    "</div>"
-                ),
-            options = markerOptions(),
-            labelOptions = labelOptions(textsize = "15px", opacity = .75)
-        )
-    
-}
-
-#########################################################################################
-
-stations_plot_2 <- 
-    stations_plot_2 %>% 
-    # addLegend(
-    #     data = station_info,
-    #     pal = viridis_pal,
-    #     position = "bottomright",
-    #     values = ~ capacity,
-    #     group = "stations",
-    #     opacity = 1,
-    #     title = "Capacity"
-    # ) %>% 
-    addLayersControl(
-        # overlayGroups = sample_stations$name, 
-        baseGroups = sample_stations$name, 
-        options = layersControlOptions(collapsed = FALSE)
-    )
-
-stations_plot_2
-
-#########################################################################################
-#########################################################################################
-#########################################################################################
-
-# add the layers with different origin stations as base groups, so that you can look at one at a time,
-#   *** BUT *** add "all stations" as the first and default base group
-
-stations_plot_3 <- 
     leaflet() %>%
+    
     enableTileCaching() %>%
+    
     addProviderTiles(
-        provider = "CartoDB.DarkMatter",
+        provider = "CartoDB.Positron",
         options = tileOptions(useCache = TRUE, crossOrigin = TRUE)
     ) %>% 
-    # addTiles(
-    #     urlTemplate = "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
-    #     options = tileOptions(useCache = TRUE, crossOrigin = TRUE)
-    # ) %>% 
+    
+    # Default base group is "all stations", with station capacity
+    
     addCircleMarkers(
         data = station_info,
         group = "All stations",
@@ -250,7 +226,7 @@ stations_plot_3 <-
         weight = 1.5,
         opacity = 1,
         fillOpacity = .25,
-        color = "white",
+        color = "#0A6ECE",
         popup = 
             ~ paste(
                 "<div style='font-size:15px'>", 
@@ -259,40 +235,45 @@ stations_plot_3 <-
                 "Capacity:", capacity,
                 "</div>"
             ),
-        options = markerOptions(),
-        labelOptions = labelOptions(textsize = "15px", opacity = .75)
+        labelOptions = labelOptions(textsize = "15px", opacity = .9),
+        popupOptions = popupOptions(closeOnClick = TRUE, closeOnEscapeKey = TRUE)
     )
 
-# stations_plot_3
 
-#########################################################################################-
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# Adding points for trip destination stations, for each start station
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 
-viridis_pal <- colorNumeric("inferno", sample_trips$trips)
+# Defining palette for trip counts
 
-set.seed(726)
+inferno_pal <- colorNumeric(inferno(512), trips_count_start_end_top_10$trips)
 
-sample_trips <- 
-    trips_count %>% 
-    filter(start_station_name %in% sample(start_station_name, 10))
+# Looping over start stations
 
-sample_stations <- unique(sample_trips$start_station_name)
-
-for (i in 1:length(sample_stations)) {
+for (i in 1:nrow(top_10_stations)) {
     
-    stations_plot_3 <- 
-        stations_plot_3 %>% 
+    stations_map <- 
+        
+        stations_map %>% 
+        
+        # Color-scaled destination stations
+        
         addCircleMarkers(
-            data = sample_trips %>% filter(start_station_name == !!sample_stations[i]),
-            group = sample_stations[i],
+            data = 
+                trips_count_start_end_top_10 %>% 
+                filter(start_station_name == !!top_10_stations$start_station_name[i]),
+            
+            group = top_10_stations$start_station_name[i],
             lng = ~ end_station_longitude,
             lat = ~ end_station_latitude,
             label = ~ end_station_name,
-            radius = 6,
+            radius = 7,
             stroke = TRUE,
             weight = 1,
-            opacity = 1,
+            opacity = .9,
+            color = "#000004",
             fillOpacity = .9,
-            color = ~ viridis_pal(trips),
+            fillColor = ~ inferno_pal(trips),
             popup = 
                 ~ paste(
                     "<div style='font-size:15px'>", 
@@ -301,14 +282,19 @@ for (i in 1:length(sample_stations)) {
                     "<i>", trips, "trips", "</i>",
                     "</div>"
                 ),
-            labelOptions = labelOptions(textsize = "15px", opacity = .75)
+            labelOptions = labelOptions(textsize = "15px", opacity = .9),
+            popupOptions = popupOptions(closeOnClick = TRUE, closeOnEscapeKey = TRUE)
         ) %>% 
+        
+        # Start station markers
+        
         addMarkers(
-            data = sample_trips %>% filter(start_station_name == !!sample_stations[i]),
-            group = sample_stations[i],
+            data = top_10_stations %>% filter(start_station_name == !!top_10_stations$start_station_name[i]),
+            group = top_10_stations$start_station_name[i],
             lng = ~ start_station_longitude,
             lat = ~ start_station_latitude,
             label = ~ start_station_name,
+            icon = marker_icon,
             popup = 
                 ~ paste(
                     "<div style='font-size:15px'>", 
@@ -317,42 +303,57 @@ for (i in 1:length(sample_stations)) {
                     "<i>", sum(trips), "total trips", "</i>",
                     "</div>"
                 ),
-            labelOptions = labelOptions(textsize = "15px", opacity = .75)
-            # icon = list(iconUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Map_pin_icon_green.svg/30px-Map_pin_icon_green.svg.png")
+            options = markerOptions(opacity = 1),
+            labelOptions = labelOptions(textsize = "15px", opacity = .9),
+            popupOptions = popupOptions(closeOnClick = TRUE, closeOnEscapeKey = TRUE)
         )
     
 }
 
-#########################################################################################-
 
-stations_plot_3 <- 
-    stations_plot_3 %>% 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# Adding legend and controls
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+
+stations_map <- 
+    
+    stations_map %>%
+    
+    addLayersControl(
+        baseGroups = 
+            c(
+                "All stations", 
+                top_10_stations$start_station_name
+            ), 
+        options = layersControlOptions(collapsed = FALSE)
+    ) %>% 
+    
     addLegend(
-        data = sample_trips,
-        pal = viridis_pal,
+        data = trips_count_start_end_top_10,
+        pal = inferno_pal,
         position = "bottomright",
         values = ~ trips,
-        opacity = 1,
+        opacity = .9,
         title = "# of trips"
-    ) %>%
-    addLayersControl(
-        baseGroups = c("All stations", sample_stations), 
-        options = layersControlOptions(collapsed = FALSE)
     )
 
-stations_plot_3
 
-#########################################################################################
+#-----------------------------------------------------------------------------------------#
+# Saving map ----
+#-----------------------------------------------------------------------------------------#
 
 saveWidget(
-    widget = stations_plot_3,
-    file = here("docs/stations_plot.html"),
+    widget = stations_map,
+    file = here("docs/stations_map.html"),
     selfcontained = TRUE,
-    title = "Stations plot"
+    title = "Top-10 start stations map"
 )
 
-#########################################################################################
-#########################################################################################
-#########################################################################################
 
-
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# #
+# #                             ---- THIS IS THE END! ----
+# #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #

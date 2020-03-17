@@ -11,7 +11,7 @@
 #=========================================================================================#
 
 #-----------------------------------------------------------------------------------------#
-# Loading libraries ----
+# Loading libraries
 #-----------------------------------------------------------------------------------------#
 
 library(lubridate)
@@ -21,7 +21,7 @@ library(glue)
 library(here)
 
 #-----------------------------------------------------------------------------------------#
-# Getting names of existing data files ----
+# Getting names of existing data files (from raw)
 #-----------------------------------------------------------------------------------------#
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
@@ -31,7 +31,7 @@ library(here)
 data_paths <- 
     dir_ls(
         glue("{here()}/data/raw"), 
-        recursive = FALSE, 
+        recurse = FALSE, 
         regexp = ".csv.zip")
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
@@ -67,16 +67,52 @@ data_files <-
     arrange(desc(data_dates))
 
 #-----------------------------------------------------------------------------------------#
-# Getting dates to download
+# Getting names of existing data files (from database)
 #-----------------------------------------------------------------------------------------#
+
+# Getting latest date (`slice(1)`), then using that as the first date in a sequence ending with `today()`
 
 download_dates <- 
     data_files %>% 
     slice(1) %>% 
     pull(data_dates) %>% 
-    + months(1) %>% 
-    seq(., now(), "1 month") %>% 
+    # + months(1) %>% 
+    # seq(., as_date(now()), "1 month") %>% 
+    seq(as_date("2019-09-30 EDT"), as_date(ceiling_date(now(), "month") - months(1)), "1 month") %>% 
     as_date()
+
+
+database_exists <- citibike_trip_db %>% db_has_table("citibike_trips")
+
+if (database_exists) {
+    
+    #-----------------------------------------------------------------------------------------#
+    # Setting search parameters
+    #-----------------------------------------------------------------------------------------#
+    
+    most_recent_datetime <- 
+        citibike_trip_db %>% 
+        tbl("citibike_trips") %>% 
+        select(updated_at) %>% 
+        arrange(desc(updated_at)) %>% 
+        head(1) %>%
+        pull() %>% 
+        as_datetime(tz = "US/Eastern") %>% 
+        floor_date(unit = "day")
+    
+    most_recent_datetime_numeric <- 
+        as.numeric(most_recent_datetime)
+    
+    most_recent_day <- 
+        most_recent_datetime %>% 
+        as_date()
+    
+} else {
+    
+    most_recent_day <- as_date("1900-01-01")
+    
+}
+
 
 #=========================================================================================#
 # Downloading files ----
@@ -87,21 +123,10 @@ download_dates <-
 #-----------------------------------------------------------------------------------------#
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
-# NYC
+# JC
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 
-nyc_files <- 
-    glue(
-        "https://s3.amazonaws.com/tripdata/",
-        "{year(download_dates)}{download_dates %>% format('%m')}",
-        "-citibike-tripdata.csv.zip"
-    )
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
-# Jersey City
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
-
-jc_files <- 
+trip_files_jc <- 
     glue(
         "https://s3.amazonaws.com/tripdata/",
         "JC-{year(download_dates)}{download_dates %>% format('%m')}",
@@ -109,28 +134,21 @@ jc_files <-
     )
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
-# Combining
+# NYC
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 
-nyc_jc_files <- c(nyc_files, jc_files)
+trip_files_nyc <- 
+    glue(
+        "https://s3.amazonaws.com/tripdata/",
+        "{year(download_dates)}{download_dates %>% format('%m')}",
+        "-citibike-tripdata.csv.zip"
+    )
 
-#-----------------------------------------------------------------------------------------#
-# Downloading ----
-#-----------------------------------------------------------------------------------------#
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# NYC
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 
-# for (i in 1:length(nyc_jc_files)) {
-#     
-#     cat("\n", nyc_jc_files[i])
-#     
-#     tryCatch({
-#         
-#         download.file(url = nyc_jc_files[i],
-#                       destfile = glue("{here()}/data/raw/{path_file(nyc_jc_files[i])}"),
-#                       mode = "wb",
-#                       method = "libcurl")
-#         
-#     }, finally = next) 
-# }
+trip_files <- c(trip_files_jc, trip_files_nyc)
 
 #-----------------------------------------------------------------------------------------#
 # Downloading ----
@@ -140,8 +158,8 @@ nyc_jc_files <- c(nyc_files, jc_files)
 #   download simultaneously
 
 download.file(
-    url = nyc_jc_files,
-    destfile = glue("{here()}/data/raw/{path_file(nyc_jc_files)}"),
+    url = trip_files,
+    destfile = glue("{here()}/data/raw/{path_file(trip_files)}"),
     mode = "wb",
     method = "libcurl"
 )
