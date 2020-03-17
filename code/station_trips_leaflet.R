@@ -176,7 +176,6 @@ map_marker_red <-
         color = "red",
         point = "+150+50", 
         fuzz = 0
-        # refcolor = "black"
     )
 
 # Saving modified marker
@@ -188,9 +187,9 @@ image_write(map_marker_red, "map_marker_red.svg", format = "svg")
 marker_icon <- 
     makeIcon(
         iconUrl = "map_marker_red.svg",
-        iconWidth = 50,
-        iconAnchorX = 25,
-        iconAnchorY = 50
+        iconWidth = 40,
+        iconAnchorX = 20,
+        iconAnchorY = 40
     )
 
 
@@ -209,7 +208,7 @@ stations_map <-
     enableTileCaching() %>%
     
     addProviderTiles(
-        provider = "CartoDB.Positron",
+        provider = "CartoDB.DarkMatter",
         options = tileOptions(useCache = TRUE, crossOrigin = TRUE)
     ) %>% 
     
@@ -221,11 +220,10 @@ stations_map <-
         lng = ~ longitude,
         lat = ~ latitude,
         label = ~ name,
-        radius = 3,
-        stroke = TRUE,
-        weight = 1.5,
-        opacity = 1,
-        fillOpacity = .25,
+        radius = 4,
+        stroke = FALSE,
+        weight = 0,
+        fillOpacity = 1,
         color = "#0A6ECE",
         popup = 
             ~ paste(
@@ -267,12 +265,10 @@ for (i in 1:nrow(top_10_stations)) {
             lng = ~ end_station_longitude,
             lat = ~ end_station_latitude,
             label = ~ end_station_name,
-            radius = 7,
+            radius = 4,
             stroke = FALSE,
             weight = 0,
-            opacity = .9,
-            color = "#000004",
-            fillOpacity = .9,
+            fillOpacity = 1,
             fillColor = ~ my_viridis_pal(trips),
             popup = 
                 ~ paste(
@@ -303,7 +299,7 @@ for (i in 1:nrow(top_10_stations)) {
                     "<i>", sum(trips), "total trips", "</i>",
                     "</div>"
                 ),
-            options = markerOptions(opacity = 1),
+            options = markerOptions(opacity = .85),
             labelOptions = labelOptions(textsize = "15px", opacity = .9),
             popupOptions = popupOptions(closeOnClick = TRUE, closeOnEscapeKey = TRUE)
         )
@@ -337,6 +333,7 @@ stations_map <-
         title = "# of trips"
     )
 
+stations_map
 
 #-----------------------------------------------------------------------------------------#
 # Saving map ----
