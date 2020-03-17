@@ -246,7 +246,7 @@ stations_map <-
 
 # Defining palette for trip counts
 
-inferno_pal <- colorNumeric(inferno(512), trips_count_start_end_top_10$trips)
+my_viridis_pal <- colorNumeric(viridis(512), trips_count_start_end_top_10$trips)
 
 # Looping over start stations
 
@@ -273,7 +273,7 @@ for (i in 1:nrow(top_10_stations)) {
             opacity = .9,
             color = "#000004",
             fillOpacity = .9,
-            fillColor = ~ inferno_pal(trips),
+            fillColor = ~ my_viridis_pal(trips),
             popup = 
                 ~ paste(
                     "<div style='font-size:15px'>", 
@@ -330,7 +330,7 @@ stations_map <-
     
     addLegend(
         data = trips_count_start_end_top_10,
-        pal = inferno_pal,
+        pal = my_viridis_pal,
         position = "bottomright",
         values = ~ trips,
         opacity = .9,
