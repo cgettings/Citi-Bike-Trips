@@ -15,7 +15,7 @@ This map displays the top-10 start stations for citi bike trips taken in April o
 
 *_Relative to every other end station, for trips starting at each of the top-10 start stations._
 
-<iframe src="https://cgettings.github.io/Citi-Bike-Trips/docs/stations_map.html" style="border:none; background:none" height="650" width="110%"> </iframe>
+<iframe src="https://cgettings.github.io/Citi-Bike-Trips/docs/stations_map.html" style="border:none; background:none" height="650" width="100%"> </iframe>
 
 ([`code`](/code/station_trips_leaflet.R))
 
@@ -27,7 +27,7 @@ This bike was used for 40 separate trips on Thursday, July 13th 2017. It was pic
 
 Most of the trips taken on this bike were between stations in midtown, with clusters during the AM and PM rush hours.
 
-<iframe src="https://cgettings.github.io/Citi-Bike-Trips/docs/one_bike_frames.html" style="border:none; background:none" height="750" width="90%"> 
+<iframe src="https://cgettings.github.io/Citi-Bike-Trips/docs/one_bike_frames.html" style="border:none; background:none" height="750" width="100%"> 
 </iframe>
 
 ([`code`](/code/one_bike_stops_slides.R))
