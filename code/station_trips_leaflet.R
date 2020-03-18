@@ -242,13 +242,20 @@ stations_map <-
 # Adding points for trip destination stations, for each start station
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 
-# Defining palette for trip counts
-
-my_viridis_pal <- colorNumeric(viridis(512), trips_count_start_end_top_10$trips)
-
 # Looping over start stations
 
 for (i in 1:nrow(top_10_stations)) {
+    
+    # Defining palette for trip counts
+    
+    my_viridis_pal <- 
+        colorNumeric(
+            cividis(512), 
+            trips_count_start_end_top_10 %>% 
+                filter(start_station_name == !!top_10_stations$start_station_name[i]) %>% 
+                pull(trips)
+        )
+    
     
     stations_map <- 
         
@@ -322,15 +329,6 @@ stations_map <-
                 top_10_stations$start_station_name
             ), 
         options = layersControlOptions(collapsed = FALSE)
-    ) %>% 
-    
-    addLegend(
-        data = trips_count_start_end_top_10,
-        pal = my_viridis_pal,
-        position = "bottomright",
-        values = ~ trips,
-        opacity = .9,
-        title = "# of trips"
     )
 
 stations_map
