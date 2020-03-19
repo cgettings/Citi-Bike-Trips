@@ -111,7 +111,7 @@ trips_count_start_end <-
         end_station_latitude, 
         name = "trips"
     ) %>% 
-    arrange(start_station_longitude)
+    arrange(trips)
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
@@ -127,7 +127,7 @@ trips_count_start <-
         start_station_latitude,
         name = "trips"
     ) %>% 
-    arrange(-trips)
+    arrange(trips)
 
 
 #-----------------------------------------------------------------------------------------#
@@ -140,6 +140,7 @@ trips_count_start <-
 
 top_10_stations <- 
     trips_count_start %>% 
+    arrange(-trips) %>% 
     slice(1:10)
 
 
@@ -164,31 +165,36 @@ trips_count_start_end_top_10 <-
 
 map_marker <- 
     image_read_svg(
-        "https://upload.wikimedia.org/wikipedia/commons/9/92/Ic_location_on_48px.svg",
+        "https://visualpharm.com/assets/771/Long%20Arrow%20Down-595b40b75ba036ed117d85ab.svg",
         width = 300
     )
 
-# citibike light blue color
+# Changing color to cyan
 
-map_marker_red <-
+map_marker <-
+    map_marker %>% 
     image_fill(
-        image = map_marker,
-        color = "red",
-        point = "+150+50", 
+        color = "black",
+        point = "+143+260", 
+        fuzz = 100
+    ) %>% 
+    image_fill(
+        color = "cyan",
+        point = "+143+260", 
         fuzz = 0
     )
 
 # Saving modified marker
 
-image_write(map_marker_red, "map_marker_red.svg", format = "svg")
+image_write(map_marker, "map_marker.svg", format = "svg")
 
 # Turning the marker image into a leaflet marker icon
 
 marker_icon <- 
     makeIcon(
-        iconUrl = "map_marker_red.svg",
-        iconWidth = 40,
-        iconAnchorX = 20,
+        iconUrl = "map_marker.svg",
+        iconWidth = 34,
+        iconAnchorX = 17,
         iconAnchorY = 40
     )
 
@@ -208,7 +214,7 @@ stations_map <-
     setView(lng = -73.925380, lat = 40.736118, zoom = 12) %>%
     
     enableTileCaching() %>%
-    ♀
+    
     addProviderTiles(
         provider = "CartoDB.DarkMatter",
         options = tileOptions(useCache = TRUE, crossOrigin = TRUE)
@@ -222,11 +228,11 @@ stations_map <-
         lng = ~ longitude,
         lat = ~ latitude,
         label = ~ name,
-        radius = 4,
+        radius = 3.5,
         stroke = FALSE,
         weight = 0,
         fillOpacity = 1,
-        color = "#0A6ECE",
+        color = "white",
         popup = 
             ~ paste(
                 "<div style='font-size:15px'>", 
@@ -309,7 +315,7 @@ for (i in 1:nrow(top_10_stations)) {
                     "</div>"
                 ),
             options = markerOptions(opacity = .85),
-            labelOptions = labelOptions(textsize = "15px", opacity = .9),
+            labelOptions = labelOptions(textsize = "15px", style = list(fontWeight = "bold", fontStyle = "italic"), opacity = .9),
             popupOptions = popupOptions(closeOnClick = TRUE, closeOnEscapeKey = TRUE)
         )
     

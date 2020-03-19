@@ -75,7 +75,6 @@ code/testing_prophet.R
 code/testing_time_series_with_uv_index.R
 code/testing_weighted_temp_means.R
 code/functions/desktop.ini
-code/nyc_weather.R
 code/testing_crossed_vs_nested.R
 trip_data.Rproj
 Rplot13.pdf
@@ -323,8 +322,6 @@ data/weather/_var_www_html_UVB_tmp_NY01201803050_ind.csv
 data/weather/_var_www_html_UVB_tmp_NY01201803020_ind.csv
 data/trwx_fit_workspace.RData
 data/nyc_weather_db.sqlite3
-data/weather/darksky_data [May].rds
-data/weather/darksky_data [May].rds
 data/weather/Geneva_NY_UVI_2013-01-01.csv
 data/ride_pages/point_10;max_dist_20;offset_0.html
 data/ride_pages/point_10;max_dist_20;offset_100.html
@@ -2868,7 +2865,6 @@ docs/ipopt_setup.html
 docs/IPOPT.html
 docs/index.html
 data/weather/three_min_uv_names.rds
-data/weather/darksky_data [May].rds
 data/trwx_fit_data.jls
 data/Streets/streets_shp_df.RDS
 data/Streets/pumas_2010_nyc.pdf
@@ -2969,8 +2965,6 @@ data/Streets/Centerline/Centerline.pdf
 data/Streets/Centerline/Centerline.dbf
 data/Streets/Centerline/Centerline.csv
 data/Streets/Centerline/Centerline.cpg
-data/weather/darksky_data [May].rds
-data/weather/darksky_data [May].rds
 .Renviron
 code/allFit_test.R
 code/april_10_station_fits.R
@@ -3069,9 +3063,3 @@ data/march_april_may/trips_station_weather_data.rds - Shortcut.lnk
 data/march_april_may/trips_station_weather_data_with_0s.rds
 data/march_april_may/weather_hourly_all.rds
 data/march_april_may/weather_hourly_new.rds
-code/trips_polyline_database.R
-data/march_april_may/trips_station_hourly.rds
-data/march_april_may/trips_station_weather_data.rds
-data/march_april_may/weather_hourly_all.rds
-data/march_april_may/weather_hourly_new.rds
-data/weather/darksky_data [May].rds
