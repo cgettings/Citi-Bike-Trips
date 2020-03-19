@@ -3063,3 +3063,10 @@ data/march_april_may/trips_station_weather_data.rds - Shortcut.lnk
 data/march_april_may/trips_station_weather_data_with_0s.rds
 data/march_april_may/weather_hourly_all.rds
 data/march_april_may/weather_hourly_new.rds
+code/functions/ts_fitted_plot_stations.R
+code/trips_polyline_database.R
+data/march_april_may/trips_station_hourly.rds
+data/march_april_may/trips_station_weather_data.rds
+data/march_april_may/weather_hourly_all.rds
+data/march_april_may/weather_hourly_new.rds
+data/weather/darksky_data [May].rds
