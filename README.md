@@ -5,7 +5,7 @@ Trip data can be retrieved from the Citi Bike [system data page](https://www.cit
 
 ## Downloading
 
-I use R to download, clean, and store trip data, using this [`code`](/code/trips_database.R).
+I use R to download, clean, and store trip data, using this [`code`](https://github.com/cgettings/Citi-Bike-Trips/blob/master/code/trips_database.R).
 
 ## Visualizations
 
@@ -17,7 +17,7 @@ This map displays the top-10 start stations for citi bike trips taken in April o
 
 <iframe src="https://cgettings.github.io/Citi-Bike-Trips/docs/stations_map.html" style="border:none; background:none" height="650" width="100%"> </iframe>
 
-([`code`](/code/station_trips_leaflet.R))
+([`code`](https://github.com/cgettings/Citi-Bike-Trips/blob/master/code/station_trips_leaflet.R))
 
 ### Tracking the most-used bike on 7/13/2017:
 
@@ -30,7 +30,7 @@ Most of the trips taken on this bike were between stations in midtown, with clus
 <iframe src="https://cgettings.github.io/Citi-Bike-Trips/docs/one_bike_frames.html" style="border:none; background:none" height="750" width="100%"> 
 </iframe>
 
-([`code`](/code/one_bike_stops_slides.R))
+([`code`](https://github.com/cgettings/Citi-Bike-Trips/blob/master/code/one_bike_stops_slides.R))
 
 ***To-do:** Visualize projected routes for each trip using the [OSRM API](http://project-osrm.org/)*
 
