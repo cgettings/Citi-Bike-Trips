@@ -205,8 +205,10 @@ stations_map <-
     
     leaflet() %>%
     
-    enableTileCaching() %>%
+    setView(lng = -73.925380, lat = 40.736118, zoom = 12) %>%
     
+    enableTileCaching() %>%
+    ♀
     addProviderTiles(
         provider = "CartoDB.DarkMatter",
         options = tileOptions(useCache = TRUE, crossOrigin = TRUE)
