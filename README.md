@@ -35,6 +35,6 @@ Most of the trips taken on this bike were between stations in midtown, with clus
 
 ## Modeling Citi Bike trips for April of 2019
 
-Code for fitting a generalized linear mixed effects model to trip and weather data. from the raw data files.
+Code for fitting a generalized linear mixed effects model to trip and weather data, starting from the raw data files.
 
 ***Coming soon***
