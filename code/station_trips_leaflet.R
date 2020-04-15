@@ -98,9 +98,11 @@ station_info <-
 # By start and end station
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 
-trips_count_start_end <- 
+# Station list
+
+start_end_stations <- 
     trips %>% 
-    count(
+    distinct(
         start_station_id,
         start_station_name,
         start_station_longitude,
@@ -108,8 +110,22 @@ trips_count_start_end <-
         end_station_id,
         end_station_name,
         end_station_longitude,
-        end_station_latitude, 
+        end_station_latitude
+    )
+
+# Counting
+
+trips_count_start_end <- 
+    trips %>% 
+    count(
+        start_station_id,
+        end_station_id,
         name = "trips"
+    ) %>% 
+    left_join(
+        .,
+        start_end_stations,
+        by = c("start_station_id", "end_station_id")
     ) %>% 
     arrange(trips)
 
@@ -118,14 +134,29 @@ trips_count_start_end <-
 # By start station
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 
+# Station list
+
+start_stations <- 
+    trips %>% 
+    distinct(
+        start_station_id,
+        start_station_name,
+        start_station_longitude,
+        start_station_latitude
+    )
+
+# Counting
+
 trips_count_start <-
     trips %>%
     count(
         start_station_id,
-        start_station_name,
-        start_station_longitude,
-        start_station_latitude,
         name = "trips"
+    ) %>% 
+    left_join(
+        .,
+        start_stations,
+        by = "start_station_id"
     ) %>% 
     arrange(trips)
 
