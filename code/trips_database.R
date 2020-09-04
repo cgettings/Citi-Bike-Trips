@@ -6,8 +6,6 @@
 ###########################################################################################-
 ###########################################################################################-
 
-# EDIT SO IT BASES ADDITIONS ON CURRENT DATABASE (a la baseball database)
-
 #=========================================================================================#
 # Setting up ----
 #=========================================================================================#
@@ -31,34 +29,33 @@ library(glue)
 
 citibike_trip_db <- dbConnect(SQLite(), "data/citibike_trip_db.sqlite3")
 
-#=========================================================================================#
-# Getting data frame of file names to extract ----
-#=========================================================================================#
+#-----------------------------------------------------------------------------------------#
+# Getting date of most recent data
+#-----------------------------------------------------------------------------------------#
 
-database_exists <- citibike_trip_db %>% db_has_table("citibike_trips")
+database_has_citibike_trips <- citibike_trip_db %>% db_has_table("citibike_trips")
 
-if (database_exists) {
+if (database_has_citibike_trips) {
+    
+    query <- 
+        sql(
+            glue(
+                "SELECT `year`, `month`, `day`",
+                "FROM `citibike_trips`",
+                "ORDER BY `year` DESC, `month` DESC, `day` DESC",
+                .sep = " "
+            )
+        )
     
     #-----------------------------------------------------------------------------------------#
     # Setting search parameters
     #-----------------------------------------------------------------------------------------#
     
-    most_recent_datetime <- 
-        citibike_trip_db %>% 
-        tbl("citibike_trips") %>% 
-        select(start_time) %>% 
-        arrange(desc(start_time)) %>% 
-        head(1) %>%
-        pull() %>% 
-        as_datetime(tz = "US/Eastern") %>% 
-        floor_date(unit = "day")
-    
-    most_recent_datetime_numeric <- 
-        as.numeric(most_recent_datetime)
-    
     most_recent_day <- 
-        most_recent_datetime %>% 
-        as_date()
+        citibike_trip_db %>% 
+        db_collect(query, n = 1) %>% 
+        mutate(date = str_c(year, month, day, sep = "-") %>% as_date()) %>% 
+        pull(date)
     
 } else {
     
@@ -91,8 +88,8 @@ trip_file_names <-
 
 trip_file_dates <- 
     trip_file_names %>% 
-    str_remove("(-|_)citibike-tripdata") %>% 
-    parse_date_time(orders = "ym") %>% 
+    str_extract("(\\d{4,8})") %>% 
+    parse_date_time(orders = c("ym", "y")) %>% 
     as_date()
 
 trip_files <- 
@@ -157,39 +154,40 @@ for (i in 1:nrow(trip_files_to_add)) {
         read_csv(str_c(local_dir_unzipped, trip_csv, sep = "/")) %>%
         `attr<-`("problems", NULL) %>% 
         
-        as_tibble() %>% 
+        rename_all( ~ str_replace_all(.x, " ", "_")) %>% 
         
-        make_clean_names() %>% 
-        
-        transmute(
+        rename(
             trip_duration = tripduration,
+            bike_id       = bikeid,
+            user_type     = usertype,
+            start_time    = starttime,
+            stop_time     = stoptime
+        ) %>% 
             
-            start_time = starttime %>% 
+        mutate(
+            start_time = 
+                start_time %>% 
                 parse_date_time(
                     orders = c("ymd HMS", "mdy HMS"), 
-                    tz     = "US/Eastern"),
+                    tz = "US/Eastern"
+                ),
             
-            stop_time = stoptime %>% 
+            stop_time = 
+                stop_time %>% 
                 parse_date_time(
                     orders = c("ymd HMS", "mdy HMS"), 
-                    tz     = "US/Eastern"),
+                    tz = "US/Eastern"
+                ),
             
-            year  = start_time %>% year(),
-            month = start_time %>% month(),
-            day   = start_time %>% day(),
+            year  = start_time %>% year()  %>% as.integer(),
+            month = start_time %>% month() %>% as.integer(),
+            day   = start_time %>% day()   %>% as.integer(),
             
-            start_station_id        = as.integer(startstationid),
-            start_station_name      = as.character(startstationname),
-            start_station_latitude  = as.double(startstationlatitude),
-            start_station_longitude = as.double(startstationlongitude),
-            end_station_id          = as.integer(endstationid),
-            end_station_name        = as.character(endstationname),
-            end_station_latitude    = as.double(endstationlatitude),
-            end_station_longitude   = as.double(endstationlongitude),
-            bike_id                 = bikeid,
-            user_type               = usertype,
-            birth_year              = as.integer(birthyear),
-            gender                  = gender
+            start_station_id = as.integer(start_station_id),
+            end_station_id   = as.integer(end_station_id),
+            birth_year       = as.integer(birth_year),
+            bike_id          = as.integer(bike_id)
+            
         )
     
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
@@ -247,7 +245,7 @@ index_tbl <-
     as_tibble()
 
 
-if (nrow(index_tbl) == 0) {
+if (all(index_tbl$tbl_name != "citibike_trips")) {
     
     db_create_index(citibike_trip_db, "citibike_trips", "year")
     db_create_index(citibike_trip_db, "citibike_trips", "month")
