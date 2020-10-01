@@ -33,7 +33,7 @@ Most of the trips taken on this bike were between stations in midtown, with clus
 
 ***To-do:** Visualize projected routes for each trip using the [OSRM API](http://project-osrm.org/)*
 
-## Modeling Citi Bike trips for April of 2019
+## Modeling Citi Bike trips in 2018
 
 Code for fitting a generalized linear mixed effects model to trip and weather data, starting from the raw data files.
 
