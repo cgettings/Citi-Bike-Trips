@@ -54,7 +54,7 @@ if (database_has_citibike_trips) {
     most_recent_day <- 
         citibike_trip_db %>% 
         db_collect(query, n = 1) %>% 
-        mutate(date = str_c(year, month, day, sep = "-") %>% as_date()) %>% 
+        mutate(date = make_date(year, month, day)) %>% 
         pull(date)
     
 } else {
@@ -68,7 +68,7 @@ if (database_has_citibike_trips) {
 # Listing raw data files
 #-----------------------------------------------------------------------------------------#
 
-local_dir <- str_c(here(), "/data/raw/")
+local_dir <- here("data/raw")
 
 trip_file_list <- 
     dir_info(local_dir,
@@ -113,7 +113,7 @@ trip_files_to_add <-
 # Extracting trip data and saving to database ----
 #=========================================================================================#
 
-local_dir_unzipped <- str_c(local_dir, "unzipped")
+local_dir_unzipped <- path(local_dir, "unzipped")
 
 dir_create(local_dir_unzipped)
 
@@ -133,14 +133,14 @@ for (i in 1:nrow(trip_files_to_add)) {
     
     trip_csv <- 
         unzip(
-            zipfile = str_c(local_dir, trip_files_to_add$trip_file_list[i]),
+            zipfile = path(local_dir, trip_files_to_add$trip_file_list[i]),
             list = TRUE,
             exdir = local_dir_unzipped) %>%
         slice(1) %>% 
         pull(Name)
     
     unzip(
-        zipfile = str_c(local_dir, trip_csv),
+        zipfile = path(local_dir, trip_csv),
         exdir = local_dir_unzipped,
         unzip = "unzip"
     )
@@ -151,7 +151,7 @@ for (i in 1:nrow(trip_files_to_add)) {
     
     trip_unzip <- 
         
-        read_csv(str_c(local_dir_unzipped, trip_csv, sep = "/")) %>%
+        read_csv(path(local_dir_unzipped, trip_csv)) %>%
         `attr<-`("problems", NULL) %>% 
         
         rename_all( ~ str_replace_all(.x, " ", "_")) %>% 
@@ -227,7 +227,7 @@ for (i in 1:nrow(trip_files_to_add)) {
     # removing the unzipped files
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
     
-    file_delete(str_c(local_dir_unzipped, trip_csv, sep = "/"))
+    file_delete(path(local_dir_unzipped, trip_csv))
     
     gc()
     
@@ -238,8 +238,8 @@ for (i in 1:nrow(trip_files_to_add)) {
 #-----------------------------------------------------------------------------------------#
 
 index_tbl <- 
+    citibike_trip_db %>% 
     dbGetQuery(
-        citibike_trip_db, 
         "SELECT * FROM sqlite_master WHERE type = 'index'"
     ) %>% 
     as_tibble()
@@ -247,30 +247,30 @@ index_tbl <-
 
 if (all(index_tbl$tbl_name != "citibike_trips")) {
     
-    db_create_index(citibike_trip_db, "citibike_trips", "year")
-    db_create_index(citibike_trip_db, "citibike_trips", "month")
-    db_create_index(citibike_trip_db, "citibike_trips", "day")
-    db_create_index(citibike_trip_db, "citibike_trips", "start_station_id")
-    db_create_index(citibike_trip_db, "citibike_trips", "end_station_id")
-    db_create_index(citibike_trip_db, "citibike_trips", "bike_id")
-    db_create_index(citibike_trip_db, "citibike_trips", "user_type")
-    db_create_index(citibike_trip_db, "citibike_trips", "birth_year")
-    db_create_index(citibike_trip_db, "citibike_trips", "gender")
+    citibike_trip_db %>% db_create_index("citibike_trips", "year")
+    citibike_trip_db %>% db_create_index("citibike_trips", "month")
+    citibike_trip_db %>% db_create_index("citibike_trips", "day")
+    citibike_trip_db %>% db_create_index("citibike_trips", "start_station_id")
+    citibike_trip_db %>% db_create_index("citibike_trips", "end_station_id")
+    citibike_trip_db %>% db_create_index("citibike_trips", "bike_id")
+    citibike_trip_db %>% db_create_index("citibike_trips", "user_type")
+    citibike_trip_db %>% db_create_index("citibike_trips", "birth_year")
+    citibike_trip_db %>% db_create_index("citibike_trips", "gender")
     
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
     # vacuuming
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
     
-    dbExecute(citibike_trip_db, "VACUUM")
+    citibike_trip_db %>% dbExecute("VACUUM")
     
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
     # checking indexes
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
     
-    dbGetQuery(
-        citibike_trip_db, 
-        "SELECT * FROM sqlite_master WHERE type = 'index'"
-    ) %>% 
+    citibike_trip_db %>% 
+        dbGetQuery(
+            "SELECT * FROM sqlite_master WHERE type = 'index'"
+        ) %>% 
         as_tibble()
     
 }

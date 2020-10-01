@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Chris Gettings" />
+  <title>CSG Justice Center Project Presentation</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="CSG_Justice_Center_Presentation_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="CSG_Justice_Center_Presentation_files/reveal.js-3.3.0.1/css/theme/simple.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="css\code_background_color.css"/>
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <link href="CSG_Justice_Center_Presentation_files/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+    <script src="CSG_Justice_Center_Presentation_files/pagedtable-1.1/js/pagedtable.js"></script>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">CSG Justice Center Project Presentation</h1>
+    <h2 class="author">Chris Gettings</h2>
+    <h3 class="date">9/30/2020</h3>
+</section>
+
+<section id="overview" class="slide level2">
+<h2><strong>Overview</strong></h2>
+<div style = "text-align: left; padding: 20px 0px 0px 0px;">
+
+<div class="fragment" data-fragment-index="1">
+<ul>
+<li>Project
+</div>
+<div class="fragment" data-fragment-index="1">
+  - Description
+</div>
+<div class="fragment" data-fragment-index="1">
+  - Rationale
+</div>
+<div class="fragment" data-fragment-index="2">
+<ul>
+<li>Data pipeline (all in <strong><code>R</code></strong>)
+</div>
+<div class="fragment" data-fragment-index="2">
+  - Getting data
+</div>
+<div class="fragment" data-fragment-index="2">
+  - Building analysis dataset
+</div>
+<div class="fragment" data-fragment-index="2">
+  - Final data example
+</div>
+<div class="fragment" data-fragment-index="3">
+<ul>
+<li>Analysis
+</div>
+<div class="fragment" data-fragment-index="3">
+  - Description
+</div>
+<div class="fragment" data-fragment-index="3">
+  - Model specification
+</div>
+<div class="fragment" data-fragment-index="4">
+<ul>
+<li>Findings
+</div>
+<div class="fragment" data-fragment-index="4">
+  - Checking model fit
+</div>
+<div class="fragment" data-fragment-index="4">
+  - Predictions
+</div>
+<div class="fragment" data-fragment-index="5">
+<ul>
+<li>Future directions
+</div></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="project" class="slide level2">
+<h2><strong>Project</strong></h2>
+<p>Mapping and analyzing Citi Bike trips in NYC<br />
+<small>(on Github @ cgettings/Citi-Bike-Trips)</small></p>
+<div class="fragment" data-fragment-index="1" style="color: navy; font-size: 90%; text-align: left;">
+<em>Can I predict station traffic, given a timestamp, a docking station, and a weather forecast?</em>
+</div>
+<p><br></p>
+<h3 class="fragment" data-fragment-index="2">
+<strong>Why do it?</strong>
+</h3>
+<div class="fragment" data-fragment-index="3">
+<ul>
+<li>Interesting, complex
+</div>
+<div class="fragment" data-fragment-index="3">
+<ul>
+<li>Useful for planning bike redistribution
+</div>
+<div class="fragment" data-fragment-index="3">
+<ul>
+<li>An excuse to learn cool stuff
+</div></li>
+</ul></li>
+</ul></li>
+</ul>
+<p><br></p>
+<h3 class="fragment" data-fragment-index="4">
+<strong>Why present it?</strong>
+</h3>
+<div class="fragment" data-fragment-index="5">
+<ul>
+<li>Interesting, complex
+</div>
+<div class="fragment" data-fragment-index="5">
+<ul>
+<li>Responsible for many of my data science skills
+</div></li>
+</ul></li>
+</ul>
+</section>
+<section id="data-pipeline-getting-data" class="slide level2">
+<h2><strong>Data pipeline:</strong> Getting data</h2>
+<!-- ### Getting data -->
+<div style="text-align: left; padding: 20px 0px 0px 0px;">
+<strong>Target:</strong> Local SQLite tables with data on Citi Bike trips, station status, and weather conditions
+</div>
+<div style = "text-align: left; font-size: 80%; padding: 20px 0px 0px 0px;">
+
+<div class="fragment" data-fragment-index="2">
+<ol type="1">
+<li>Check for new data
+</div>
+<div class="fragment" data-fragment-index="7">
+ 2. ↪ Get new data
+</div>
+<div class="fragment" data-fragment-index="11">
+ 3. ↪ Process + upload to database
+</div></li>
+</ol>
+<div style="font-size: 70%; padding: 20px 0px 0px 0px;">
+<div class="fragment" data-fragment-index="1" style="padding: 10px 0px 0px 0px;">
+<strong>Trip data:</strong>
+</div>
+<div class="fragment" data-fragment-index="3">
+  S3 bucket ↔︎ Local CSV files
+</div>
+<div class="fragment" data-fragment-index="8">
+  ↪ <strong>⤓</strong> new CSV files → 💾
+</div>
+<div class="fragment" data-fragment-index="12">
+   ↪ SQLite
+</div>
+<div class="fragment" data-fragment-index="1" style="padding: 10px 0px 0px 0px;">
+<strong>Station status data:</strong>
+</div>
+<div class="fragment" data-fragment-index="4">
+  Public Google Drive folder <small>(old way)</small>
+</div>
+<div class="fragment" data-fragment-index="9">
+  ↪ <strong>⤓</strong> + 💾 all CSV files
+</div>
+<div class="fragment" data-fragment-index="12">
+   ↪ SQLite
+</div>
+<div class="fragment" data-fragment-index="4" style="padding: 5px 0px 0px 0px;">
+  AWS server ↔︎ Local JSON files<small>(new way)</small>
+</div>
+<div class="fragment" data-fragment-index="9">
+  ↪ <strong>⤓</strong> new JSON files → 💾
+</div>
+<div class="fragment" data-fragment-index="12">
+   ↪ SQLite
+</div>
+<div class="fragment" data-fragment-index="1" style="padding: 10px 0px 0px 0px;">
+<strong>Weather data:</strong>
+</div>
+<div class="fragment" data-fragment-index="6">
+  NOAA API ↔︎ SQLite
+</div>
+<div class="fragment" data-fragment-index="10">
+  ↪ <strong>⤓</strong> new records (as CSV)
+</div>
+<div class="fragment" data-fragment-index="12">
+   ↪ SQLite
+</div>
+</div>
+</div>
+</section>
+<section id="data-pipeline-building-analysis-dataset" class="slide level2">
+<h2><strong>Data pipeline:</strong> Building analysis dataset</h2>
+<div style="text-align: left; padding: 20px 0px 0px 0px;">
+<strong>Target:</strong> One combined dataset for 2018
+</div>
+<div style = "text-align: left; font-size: 80%; padding: 30px 0px 0px 0px;">
+
+<div class="fragment" data-fragment-index="1" style="padding: 20px 0px 0px 0px;">
+<ol type="1">
+<li>Extract subset
+</div>
+<div class="fragment" data-fragment-index="1" style="font-size: 75%;">
+  - Filter: <strong><code>year == 2018</code></strong> for <strong><code>trips</code></strong>, <strong><code>status</code></strong>, and <strong><code>weather</code></strong> tables
+</div></li>
+</ol>
+<div class="fragment" data-fragment-index="2" style="padding: 20px 0px 0px 0px;">
+ 2. ↪ Summarize
+</div>
+<div class="fragment" data-fragment-index="2" style="font-size: 75%;">
+  - Summarize key variables for each <strong><code>date</code></strong> x <strong><code>hour</code></strong> ( x <strong><code>start_station</code></strong>) combination
+</div>
+<div class="fragment" data-fragment-index="3" style="padding: 20px 0px 0px 0px;">
+ 3. ↪ Combine
+</div>
+<div class="fragment" data-fragment-index="3" style="font-size: 75%;">
+   - Join on <strong><code>date</code></strong> &amp; <strong><code>hour</code></strong>
+</div>
+<div class="fragment" data-fragment-index="4" style="padding: 20px 0px 0px 0px;">
+  4. ↪ Process
+</div>
+<div class="fragment" data-fragment-index="4" style="font-size: 75%;">
+   - Create derived variables &amp; rescale predictors
+</div>
+</div>
+</section>
+<section id="data-pipeline-building-analysis-dataset-1" class="slide level2">
+<h2><strong>Data pipeline:</strong> Building analysis dataset</h2>
+<h3 id="creating-derived-variables">Creating derived variables</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">mutate</span>(</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="dt">workday =</span> <span class="kw">if_else</span>(wday_wend <span class="op">==</span><span class="st"> &quot;weekday&quot;</span> <span class="op">&amp;</span><span class="st"> </span>isholiday <span class="op">==</span><span class="st"> </span><span class="ot">FALSE</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>),</span>
+<span id="cb1-3"><a href="#cb1-3"></a>    </span>
+<span id="cb1-4"><a href="#cb1-4"></a>    <span class="dt">total_trend_yearly =</span> (<span class="kw">yday</span>(date)<span class="op">-</span><span class="dv">1</span>)<span class="op">/</span>(<span class="fl">365.25</span>),</span>
+<span id="cb1-5"><a href="#cb1-5"></a>    <span class="dt">sin_year           =</span> <span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span>total_trend_yearly),</span>
+<span id="cb1-6"><a href="#cb1-6"></a>    <span class="dt">cos_year           =</span> <span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span>total_trend_yearly)</span>
+<span id="cb1-7"><a href="#cb1-7"></a>)</span></code></pre></div>
+<h4 id="is-a-station-in-service">Is a station in service?</h4>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>data <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="st">    </span><span class="kw">group_by</span>(start_station_name, date) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="st">    </span><span class="kw">mutate</span>(</span>
+<span id="cb2-4"><a href="#cb2-4"></a>        <span class="dt">no_trips_hours =</span> <span class="kw">sum</span>(trips <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb2-5"><a href="#cb2-5"></a>        <span class="dt">n_hours =</span> <span class="kw">length</span>(trips)</span>
+<span id="cb2-6"><a href="#cb2-6"></a>    ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="st">    </span><span class="kw">mutate</span>(</span>
+<span id="cb2-8"><a href="#cb2-8"></a>        <span class="dt">in_service_trips =</span> <span class="kw">if_else</span>(no_trips_hours <span class="op">==</span><span class="st"> </span>n_hours, 0L, 1L),</span>
+<span id="cb2-9"><a href="#cb2-9"></a>        <span class="dt">in_service =</span> </span>
+<span id="cb2-10"><a href="#cb2-10"></a>            <span class="kw">case_when</span>(</span>
+<span id="cb2-11"><a href="#cb2-11"></a>                (<span class="op">!</span><span class="kw">is.finite</span>(station_status) <span class="op">&amp;</span><span class="st"> </span>in_service_trips <span class="op">==</span><span class="st"> </span>0L) <span class="op">|</span><span class="st"> </span>station_status <span class="op">==</span><span class="st"> &quot;out_of_service&quot;</span> <span class="op">~</span><span class="st"> </span>0L,</span>
+<span id="cb2-12"><a href="#cb2-12"></a>                (<span class="op">!</span><span class="kw">is.finite</span>(station_status) <span class="op">&amp;</span><span class="st"> </span>in_service_trips <span class="op">==</span><span class="st"> </span>1L) <span class="op">|</span><span class="st"> </span>station_status <span class="op">==</span><span class="st"> &quot;active&quot;</span> <span class="op">~</span><span class="st"> </span>1L</span>
+<span id="cb2-13"><a href="#cb2-13"></a>            )</span>
+<span id="cb2-14"><a href="#cb2-14"></a>)</span></code></pre></div>
+</section>
+<section id="data-pipeline-building-analysis-dataset-2" class="slide level2">
+<h2><strong>Data pipeline:</strong> Building analysis dataset</h2>
+<h3 id="rescaling-predictors">Rescaling predictors</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">mutate</span>(</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="dt">sin_year_r_2 =</span> sin_year<span class="op">/</span><span class="dv">2</span>,</span>
+<span id="cb3-3"><a href="#cb3-3"></a>    <span class="dt">cos_year_r_2 =</span> cos_year<span class="op">/</span><span class="dv">2</span>,</span>
+<span id="cb3-4"><a href="#cb3-4"></a>    </span>
+<span id="cb3-5"><a href="#cb3-5"></a>    <span class="dt">temperature_45_c15 =</span> (temperature <span class="op">-</span><span class="st"> </span><span class="dv">15</span>)<span class="op">/</span><span class="dv">45</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a>)</span></code></pre></div>
+</section>
+<section id="data-pipeline-final-data-example" class="slide level2">
+<h2><strong>Data pipeline:</strong> Final data example</h2>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["date"],"name":[1],"type":["date"],"align":["right"]},{"label":["start_station_name"],"name":[2],"type":["chr"],"align":["left"]},{"label":["start_station_longitude"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["start_station_latitude"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["in_service_fct"],"name":[5],"type":["fctr"],"align":["left"]},{"label":["capacity_med_30_c30"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["trips"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["hour"],"name":[8],"type":["fctr"],"align":["left"]},{"label":["wday"],"name":[9],"type":["ord"],"align":["right"]},{"label":["workday"],"name":[10],"type":["fctr"],"align":["left"]},{"label":["ts_yday"],"name":[11],"type":["fctr"],"align":["left"]},{"label":["total_trend_yearly"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["sin_year_r_2"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["cos_year_r_2"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["precip_yn"],"name":[15],"type":["fctr"],"align":["left"]},{"label":["temperature_45_c15"],"name":[16],"type":["dbl"],"align":["right"]},{"label":["humidity_100_c60"],"name":[17],"type":["dbl"],"align":["right"]},{"label":["dew_point_45_c7"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["daily_uv_index_10_c5"],"name":[19],"type":["dbl"],"align":["right"]}],"data":[{"1":"2018-01-01","2":"W 52 St & 11 Ave","3":"-74","4":"40.8","5":"1","6":"0.3","7":"0","8":"0","9":"Mon","10":"FALSE","11":"1","12":"0","13":"0","14":"0.5","15":"0","16":"-0.6","17":"0","18":"-0.6","19":"-0.4"},{"1":"2018-01-01","2":"W 52 St & 11 Ave","3":"-74","4":"40.8","5":"1","6":"0.3","7":"0","8":"1","9":"Mon","10":"FALSE","11":"1","12":"0","13":"0","14":"0.5","15":"0","16":"-0.6","17":"0","18":"-0.6","19":"-0.4"},{"1":"2018-01-01","2":"W 52 St & 11 Ave","3":"-74","4":"40.8","5":"1","6":"0.3","7":"0","8":"2","9":"Mon","10":"FALSE","11":"1","12":"0","13":"0","14":"0.5","15":"0","16":"-0.6","17":"0","18":"-0.6","19":"-0.4"},{"1":"2018-01-01","2":"W 52 St & 11 Ave","3":"-74","4":"40.8","5":"1","6":"0.3","7":"0","8":"3","9":"Mon","10":"FALSE","11":"1","12":"0","13":"0","14":"0.5","15":"0","16":"-0.6","17":"0","18":"-0.6","19":"-0.4"},{"1":"2018-01-01","2":"W 52 St & 11 Ave","3":"-74","4":"40.8","5":"1","6":"0.3","7":"0","8":"4","9":"Mon","10":"FALSE","11":"1","12":"0","13":"0","14":"0.5","15":"0","16":"-0.6","17":"0","18":"-0.6","19":"-0.4"},{"1":"2018-01-01","2":"W 52 St & 11 Ave","3":"-74","4":"40.8","5":"1","6":"0.3","7":"0","8":"5","9":"Mon","10":"FALSE","11":"1","12":"0","13":"0","14":"0.5","15":"0","16":"-0.6","17":"0","18":"-0.6","19":"-0.4"},{"1":"2018-01-01","2":"W 52 St & 11 Ave","3":"-74","4":"40.8","5":"1","6":"0.3","7":"0","8":"6","9":"Mon","10":"FALSE","11":"1","12":"0","13":"0","14":"0.5","15":"0","16":"-0.6","17":"0","18":"-0.6","19":"-0.4"},{"1":"2018-01-01","2":"W 52 St & 11 Ave","3":"-74","4":"40.8","5":"1","6":"0.3","7":"0","8":"7","9":"Mon","10":"FALSE","11":"1","12":"0","13":"0","14":"0.5","15":"0","16":"-0.6","17":"0","18":"-0.6","19":"-0.4"},{"1":"2018-01-01","2":"W 52 St & 11 Ave","3":"-74","4":"40.8","5":"1","6":"0.3","7":"0","8":"8","9":"Mon","10":"FALSE","11":"1","12":"0","13":"0","14":"0.5","15":"0","16":"-0.6","17":"0","18":"-0.6","19":"-0.4"},{"1":"2018-01-01","2":"W 52 St & 11 Ave","3":"-74","4":"40.8","5":"1","6":"0.3","7":"0","8":"9","9":"Mon","10":"FALSE","11":"1","12":"0","13":"0","14":"0.5","15":"0","16":"-0.6","17":"0","18":"-0.6","19":"-0.4"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</section>
+<section id="analysis-description" class="slide level2">
+<h2><strong>Analysis:</strong> Description</h2>
+<div style = "text-align: left; padding: 30px 0px 0px 0px;">
+
+<div class="fragment" data-fragment-index="1">
+<ul>
+<li>Modelling # of trips / hour that <strong>start</strong> at a given station
+</div></li>
+</ul>
+<div style="font-size: 80%; padding: 0px 0px 0px 0px;">
+<p><span class="fragment" data-fragment-index="2">  - Generalized linear mixed model,</span> <span class="fragment" data-fragment-index="3"> generalized Poisson distribution</span><br> <span class="fragment" data-fragment-index="4">  - <strong><code>{glmmTMB}</code></strong> package in <strong><code>R</code></strong></span><br> <span class="fragment" data-fragment-index="5">  - Small subset: 20 stations, March - May of 2018</span></p>
+</div>
+</div>
+</section>
+<section id="analysis-model-specification-for-glmmtmb" class="slide level2">
+<h2><strong>Analysis:</strong> Model specification for <strong><code>{glmmTMB}</code></strong></h2>
+<p><small><strong><code>glmmTMB_size_testing</code></strong> samples the data, fits the model with <strong><code>{glmmTMB}</code></strong>, gives details on progress, appends model summary output to CSV file, and returns a list with the fitted model object and some metadata</small></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>    <span class="kw">glmmTMB_size_testing</span>(</span>
+<span id="cb4-2"><a href="#cb4-2"></a>        </span>
+<span id="cb4-3"><a href="#cb4-3"></a>        trips <span class="op">~</span><span class="st"> </span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="st">            </span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="st">            </span>hour <span class="op">*</span><span class="st"> </span>workday <span class="op">+</span><span class="st"> </span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="st">            </span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="st">            </span>precip_yn <span class="op">+</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="st">            </span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="st">            </span>temperature_<span class="dv">45</span>_c15 <span class="op">+</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="st">            </span><span class="kw">I</span>(temperature_<span class="dv">45</span>_c15 <span class="op">^</span><span class="st"> </span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="st">            </span></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="st">            </span>daily_uv_index_<span class="dv">10</span>_c5 <span class="op">+</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="st">            </span><span class="kw">I</span>(daily_uv_index_<span class="dv">10</span>_c5 <span class="op">^</span><span class="st"> </span><span class="dv">2</span>) <span class="op">+</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="st">            </span></span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="st">            </span>humidity_<span class="dv">100</span>_c60 <span class="op">+</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a><span class="st">            </span><span class="kw">I</span>(humidity_<span class="dv">100</span>_c60 <span class="op">^</span><span class="st"> </span><span class="dv">2</span>) <span class="op">+</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a><span class="st">            </span></span>
+<span id="cb4-18"><a href="#cb4-18"></a><span class="st">            </span>dew_point_<span class="dv">45</span>_c7 <span class="op">+</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a><span class="st">            </span><span class="kw">I</span>(dew_point_<span class="dv">45</span>_c7 <span class="op">^</span><span class="st"> </span><span class="dv">2</span>) <span class="op">+</span></span>
+<span id="cb4-20"><a href="#cb4-20"></a><span class="st">            </span></span>
+<span id="cb4-21"><a href="#cb4-21"></a><span class="st">            </span>total_trend_yearly <span class="op">+</span></span>
+<span id="cb4-22"><a href="#cb4-22"></a><span class="st">            </span></span>
+<span id="cb4-23"><a href="#cb4-23"></a><span class="st">            </span>sin_year_r_<span class="dv">2</span> <span class="op">+</span></span>
+<span id="cb4-24"><a href="#cb4-24"></a><span class="st">            </span>cos_year_r_<span class="dv">2</span> <span class="op">+</span></span>
+<span id="cb4-25"><a href="#cb4-25"></a><span class="st">            </span></span>
+<span id="cb4-26"><a href="#cb4-26"></a><span class="st">            </span>capacity_med_<span class="dv">30</span>_c30 <span class="op">+</span></span>
+<span id="cb4-27"><a href="#cb4-27"></a><span class="st">            </span>in_service_fct <span class="op">+</span></span>
+<span id="cb4-28"><a href="#cb4-28"></a><span class="st">            </span></span>
+<span id="cb4-29"><a href="#cb4-29"></a><span class="st">            </span><span class="kw">us</span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>start_station_name) <span class="op">+</span></span>
+<span id="cb4-30"><a href="#cb4-30"></a><span class="st">            </span></span>
+<span id="cb4-31"><a href="#cb4-31"></a><span class="st">            </span><span class="kw">ar1</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>ts_yday <span class="op">|</span><span class="st"> </span>start_station_name) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb4-32"><a href="#cb4-32"></a><span class="st">            </span><span class="kw">ar1</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>hour <span class="op">|</span><span class="st"> </span>start_station_name) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb4-33"><a href="#cb4-33"></a><span class="st">            </span></span>
+<span id="cb4-34"><a href="#cb4-34"></a><span class="st">            </span><span class="kw">ar1</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>hour<span class="op">:</span>workday <span class="op">|</span><span class="st"> </span>start_station_name) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb4-35"><a href="#cb4-35"></a><span class="st">            </span><span class="kw">ar1</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>hour<span class="op">:</span>ts_yday <span class="op">|</span><span class="st"> </span>start_station_name) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb4-36"><a href="#cb4-36"></a><span class="st">            </span></span>
+<span id="cb4-37"><a href="#cb4-37"></a><span class="st">            </span><span class="kw">ar1</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>hour<span class="op">:</span>wday<span class="op">:</span>workday <span class="op">|</span><span class="st"> </span>start_station_name) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb4-38"><a href="#cb4-38"></a><span class="st">            </span><span class="kw">ar1</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>hour<span class="op">:</span>precip_yn<span class="op">:</span>workday <span class="op">|</span><span class="st"> </span>start_station_name) <span class="op">+</span></span>
+<span id="cb4-39"><a href="#cb4-39"></a><span class="st">            </span></span>
+<span id="cb4-40"><a href="#cb4-40"></a><span class="st">            </span><span class="kw">ar1</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>hour<span class="op">:</span>precip_yn<span class="op">:</span>temperature_<span class="dv">45</span>_c15 <span class="op">|</span><span class="st"> </span>start_station_name) <span class="op">+</span></span>
+<span id="cb4-41"><a href="#cb4-41"></a><span class="st">            </span><span class="kw">ar1</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>hour<span class="op">:</span>precip_yn<span class="op">:</span>humidity_<span class="dv">100</span>_c60 <span class="op">|</span><span class="st"> </span>start_station_name) <span class="op">+</span></span>
+<span id="cb4-42"><a href="#cb4-42"></a><span class="st">            </span></span>
+<span id="cb4-43"><a href="#cb4-43"></a><span class="st">            </span><span class="kw">ar1</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>hour<span class="op">:</span>workday<span class="op">:</span>temperature_<span class="dv">45</span>_c15 <span class="op">|</span><span class="st"> </span>start_station_name) <span class="op">+</span></span>
+<span id="cb4-44"><a href="#cb4-44"></a><span class="st">            </span><span class="kw">ar1</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>hour<span class="op">:</span>workday<span class="op">:</span>humidity_<span class="dv">100</span>_c60 <span class="op">|</span><span class="st"> </span>start_station_name),</span>
+<span id="cb4-45"><a href="#cb4-45"></a>            </span>
+<span id="cb4-46"><a href="#cb4-46"></a>        <span class="dt">family =</span> <span class="st">&quot;genpois&quot;</span>,</span>
+<span id="cb4-47"><a href="#cb4-47"></a>        <span class="dt">data =</span> trips_station_weather_data,</span>
+<span id="cb4-48"><a href="#cb4-48"></a>        <span class="dt">months =</span> <span class="dv">3</span><span class="op">:</span><span class="dv">5</span>,</span>
+<span id="cb4-49"><a href="#cb4-49"></a>        <span class="dt">n_stations =</span> <span class="dv">50</span>,</span>
+<span id="cb4-50"><a href="#cb4-50"></a>        <span class="dt">seed =</span> <span class="dv">726</span>, </span>
+<span id="cb4-51"><a href="#cb4-51"></a>        <span class="dt">output_dir =</span> output_dir,</span>
+<span id="cb4-52"><a href="#cb4-52"></a>        <span class="dt">verbose =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb4-53"><a href="#cb4-53"></a>        <span class="dt">profile =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb4-54"><a href="#cb4-54"></a>        <span class="dt">optCtrl =</span> optCtrl,</span>
+<span id="cb4-55"><a href="#cb4-55"></a>        <span class="dt">csv_name =</span> csv_name</span>
+<span id="cb4-56"><a href="#cb4-56"></a>    )</span></code></pre></div>
+</section>
+<section id="findings-checking-model-fit" class="slide level2">
+<h2><strong>Findings:</strong> Checking model fit</h2>
+</section>
+<section id="section" class="slide level2">
+<h2></h2>
+<div style="text-align: left; font-size: 75%;">
+<strong>Model fit:</strong> Scatter-heatmap of observed vs. predicted trips
+</div>
+<p><img data-src="../plots/time_series/2018/glmmTMB_fit_m345_20s_genpois_141213/glmmTMB_fit_m345_20s_genpois_141213_fitted_heatmap_cropped.png" alt="glmmTMB_fit_m345_20s_genpois_141213_fitted_heatmap_cropped.png" /></p>
+</section>
+<section id="section-1" class="slide level2">
+<h2></h2>
+<div style="text-align: left; font-size: 75%;">
+<strong>Model fit:</strong> Observed vs. predicted trips, by time
+</div>
+<p><img data-src="../plots/time_series/2018/glmmTMB_fit_m345_20s_genpois_141213/glmmTMB_fit_m345_20s_genpois_141213_ts_ribbon_mean_cropped.png" alt="glmmTMB_fit_m345_20s_genpois_141213_ts_ribbon_mean_cropped.png" /></p>
+</section>
+<section id="findings-predictions" class="slide level2">
+<h2><strong>Findings:</strong> Predictions</h2>
+</section>
+<section id="section-2" class="slide level2">
+<h2></h2>
+<div style="text-align: left; font-size: 75%;">
+<strong>Predictions:</strong> Predicted trips by station under hypothetical weather conditions
+</div>
+<p><img data-src="../plots/time_series/2018/glmmTMB_fit_m345_20s_genpois_141213/glmmTMB_fit_m345_20s_genpois_141213_fitted_precip_yn_temperature_level_deviation_perc.png" alt="glmmTMB_fit_m345_20s_genpois_141213_fitted_precip_yn_temperature_level_deviation_perc.png" /></p>
+</section>
+<section id="future-directions" class="slide level2">
+<h2><strong>Future directions</strong></h2>
+<ul>
+<li class="fragment">Reproducible pipeline with <strong><code>{drake}</code></strong></li>
+<li class="fragment">Cross validation with different subsets</li>
+<li class="fragment">More sophisticated diagnostics with <strong><code>{DHARMa}</code></strong></li>
+<li class="fragment">Interactive <strong><code>{leaflet}</code></strong> map</li>
+</ul>
+</section>
+<section id="thank-you" class="slide level2">
+<h2>Thank you!</h2>
+</section>
+    </div>
+  </div>
+
+  <script src="CSG_Justice_Center_Presentation_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="CSG_Justice_Center_Presentation_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display controls in the bottom right corner
+        controls: false,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'CSG_Justice_Center_Presentation_files/reveal.js-3.3.0.1/plugin/zoom-js/zoom.js', async: true },
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>

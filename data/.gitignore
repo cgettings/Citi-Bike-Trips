@@ -11,3 +11,7 @@ coord_df_comb_poly.rds
 coord_df_comb.rds
 coord_df_50.rds
 citibike_trip_db_chunk.sqlite3
+station_status/
+gis/
+weather/uv/
+march_april_may/
