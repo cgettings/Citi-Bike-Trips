@@ -2979,7 +2979,6 @@ code/exploring_poisson.R
 code/functions/all_fit_fun.R
 code/functions/contr.Sdif.R
 code/functions/deviance_GlmResp.jl
-code/functions/diagnostic_plots.R
 code/functions/fitTMB.R
 code/functions/make_model_script.R
 code/functions/nlopt_from_julia.R
@@ -3283,3 +3282,4 @@ data/march_april_may/weather_hourly_all.rds
 data/march_april_may/weather_hourly_new.rds
 data/2018/trips_station_weather_data_extra_2018_2.rds
 data/2018/trips_station_weather_data_with_0s_2018.rds
+rosm.cache
