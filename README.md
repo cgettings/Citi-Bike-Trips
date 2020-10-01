@@ -1,15 +1,65 @@
-# NYC Citi Bike Trips
-Project exploring Citi Bike trips in New York City
+# Modeling Citi Bike trips in 2018
 
-Trip data can be retrieved from the Citi Bike [system data page](https://www.citibikenyc.com/system-data) (or from the [AWS data repository](https://s3.amazonaws.com/tripdata/index.html)).
+Fitting a generalized linear mixed effects model to trip, station and weather data, starting from the raw data files.
 
-## Downloading
+## Data pipeline
 
-I use R to download, clean, and store trip data, using this [`code`](https://github.com/cgettings/Citi-Bike-Trips/blob/master/code/trips_database.R).
+### Code for getting data and saving to SQLite databases
 
-## Visualizations
+#### Trip data
 
-### Mapping trip counts with `leaflet`
+Trip data can be retrieved from the Citi Bike [system data page](https://www.citibikenyc.com/system-data) (or from the [AWS S3 Bucket](https://s3.amazonaws.com/tripdata/index.html)).
+
+[`downloading_trip_data.R`](code/downloading_trip_data.R).  
+[`trips_database.R`](code/trips_database.R).  
+
+#### Station status data
+
+Station status data can be retrieved from Citi Bike's [GBFS data feed](https://gbfs.citibikenyc.com/gbfs/en/station_status.json).
+
+[`building_station_status_database_from_archive.R`](code/building_station_status_database_from_archive.R).  
+[`station_status_database.R`](code/station_status_database.R).  
+
+#### Weather data
+
+Data obtained through [NOAA NCEI](https://www.ncei.noaa.gov/) API.
+
+[`nyc_weather_database.R`](code/nyc_weather_database.R).  
+
+### Combining and processing
+
+[`combining_trips_station_weather_data.R`](code/combining_trips_station_weather_data.R).  
+[`computing_covariates.R`](code/computing_covariates.R).  
+
+## Analysis
+
+### Model fitting
+
+#### Code for running models and producing vizualizations:
+
+[`glmmTMB_size.R`](code/glmmTMB_size.R).  
+
+##### Model fitting helper function:
+
+[`glmmTMB_size_testing.R`](code/functions/glmmTMB_size_testing.R).  
+
+##### Functions for model diagnostic plots:
+
+[`diagnostic_plots.R`](code/functions/diagnostic_plots.R).  
+[`resid_patterns.R`](code/functions/resid_patterns.R).  
+
+### Computing and vizualizing predictions
+
+[`computing_model_predictions_on_grid.R`](code/computing_model_predictions_on_grid.R).  
+[`visualizing_model_predictions.R`](code/visualizing_model_predictions.R).  
+
+
+**All plots are in the folder [plots/time_series/2018/glmmTMB_fit_m345_20s_genpois_141213](plots/time_series/2018/glmmTMB_fit_m345_20s_genpois_141213)**
+
+
+# Other Visualizations
+
+## Mapping trip counts with `leaflet`
 
 This map displays the top-10 start stations for citi bike trips taken in April of 2019, and the end stations for each those trips. Each station's color indicates the relative* number of trips that ended at that station. The default layer displays each station in the system, along with its capacity.
 
@@ -17,24 +67,6 @@ This map displays the top-10 start stations for citi bike trips taken in April o
 
 **See map at https://cgettings.github.io/Citi-Bike-Trips/**
 
-([`code`](https://github.com/cgettings/Citi-Bike-Trips/blob/master/code/station_trips_leaflet.R))
+([`code`](code/station_trips_leaflet.R))
 
-### Tracking the most-used bike on 7/13/2017:
 
-This is a graphic following a single bike around NYC for one day. 
-
-This bike was used for 40 separate trips on Thursday, July 13th 2017. It was picked up in the East Village at 6:25 AM and dropped off for the final time on the Upper West Side at 11:40 PM. The highlighted area on the timeline spans a trip's start time and end time. The relative width of the arrow corresponds to the relative duration of that trip.
-
-Most of the trips taken on this bike were between stations in midtown, with clusters during the AM and PM rush hours.
-
-**See slides at https://cgettings.github.io/Citi-Bike-Trips/**
-
-([`code`](https://github.com/cgettings/Citi-Bike-Trips/blob/master/code/one_bike_stops_slides.R))
-
-***To-do:** Visualize projected routes for each trip using the [OSRM API](http://project-osrm.org/)*
-
-## Modeling Citi Bike trips in 2018
-
-Code for fitting a generalized linear mixed effects model to trip and weather data, starting from the raw data files.
-
-***Coming soon***
