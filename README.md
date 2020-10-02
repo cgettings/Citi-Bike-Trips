@@ -53,9 +53,17 @@ Data obtained through [NOAA NCEI](https://www.ncei.noaa.gov/) API.
 [`computing_model_predictions_on_grid.R`](code/computing_model_predictions_on_grid.R)  
 [`visualizing_model_predictions.R`](code/visualizing_model_predictions.R)  
 
-
 **Example plots are in the folder [plots/time_series/2018/glmmTMB_fit_m345_20s_genpois_141213](plots/time_series/2018/glmmTMB_fit_m345_20s_genpois_141213)**, and are based on a model fitted on data from March, April, and May of 2018 (*"m345"*), with a sample of 20 stations (*"20s"*), using a generalized Poisson distribution (*"genpois"*).
 
+## Plots
+
+### Diagnostics
+
+#### Observed vs. Fitted: Scatterplot
+
+Scatterplot heatmap using `ggplot2::geom_hex()`, with `binwidth = 1`; original points represent number of trips during a single hour, on a single date, at a single station. Most fitted values are within 7 trips of the observed value, and fitted values are pretty evenly distrbuted around the 1:1 line, with a bias towards under-predicting number of trips, which is to be expected when using a mixed model.
+
+![](plots/time_series/2018/glmmTMB_fit_m345_20s_genpois_141213/glmmTMB_fit_m345_20s_genpois_141213_fitted_heatmap.png)  
 
 # Other Visualizations
 
