@@ -164,7 +164,7 @@ diagnostic_plots <-
             theme(
                 plot.title = element_text(size = rel(1), family = "mono"),
                 plot.subtitle = element_text(family = "mono"),
-                panel.background = element_rect(color = NA, fill = "gray10"),
+                panel.background = element_rect(color = NA, fill = "gray15"),
                 plot.background = element_rect(color = NA, fill = NA)
             )
         
@@ -286,7 +286,7 @@ diagnostic_plots <-
             theme(
                 plot.title = element_text(size = rel(1), family = "mono"),
                 plot.subtitle = element_text(family = "mono"),
-                panel.background = element_rect(color = NA, fill = "gray10"),
+                panel.background = element_rect(color = NA, fill = "gray14"),
                 plot.background = element_rect(color = NA, fill = NA)
             )
         
