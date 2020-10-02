@@ -54,7 +54,7 @@ Data obtained through [NOAA NCEI](https://www.ncei.noaa.gov/) API.
 [`visualizing_model_predictions.R`](code/visualizing_model_predictions.R)  
 
 
-**Example plots are in the folder [plots/time_series/2018/glmmTMB_fit_m345_20s_genpois_141213](plots/time_series/2018/glmmTMB_fit_m345_20s_genpois_141213)**, and are based on a model fitted data from March, April, and May of 2018 (*"m345"*), with a sample of 20 stations (*"20s"*), using a generalized Poisson distribution (*"genpois"*).
+**Example plots are in the folder [plots/time_series/2018/glmmTMB_fit_m345_20s_genpois_141213](plots/time_series/2018/glmmTMB_fit_m345_20s_genpois_141213)**, and are based on a model fitted on data from March, April, and May of 2018 (*"m345"*), with a sample of 20 stations (*"20s"*), using a generalized Poisson distribution (*"genpois"*).
 
 
 # Other Visualizations
