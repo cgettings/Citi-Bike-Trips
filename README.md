@@ -69,9 +69,7 @@ Scatterplot heatmap using `ggplot2::geom_hex()`, with `binwidth = 1`; original p
 
 ## Mapping trip counts with `leaflet`
 
-This map displays Citi Bike trips taken in April of 2019. The default layer displays each station in the system, along with its capacity. Clicking on a point will show the number of trips that started at that station, along with the number of trips that ended at each other station in the system. Each station's color indicates the relative* number of trips that ended at that station.
-
-*_Relative to every other end station, for trips starting at each of the start stations._
+This map displays Citi Bike trips taken in April of 2019. The default layer displays each station in the system, along with its total trips. Clicking on a point will show the number of trips that started at that station, and how many of those trips ended at each station in the system.
 
 **See map at https://cgettings.github.io/Citi-Bike-Trips/**
 

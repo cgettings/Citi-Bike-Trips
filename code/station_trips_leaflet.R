@@ -215,10 +215,10 @@ source(here("code/functions/addEasyButtonNoFaDeps.R"))
 show_station_group_on_click_js <- read_file(here("code/js/show_station_group_on_click.js"))
 
 
-capacity_viridis_pal <-
+start_trips_pal <-
     colorNumeric(
         viridis(128, option = "E"),
-        station_info %>% pull(capacity)
+        trips_count_start %>% pull(trips)
     )
 
 
@@ -254,22 +254,22 @@ stations_map <-
     # Default base group is "all stations", with station capacity
     
     addCircleMarkers(
-        data = station_info,
+        data = trips_count_start,
         group = "all_stations",
-        layerId = ~ name,
+        layerId = ~ start_station_name,
         label =
             ~ paste(
-                name,
+                start_station_name,
                 "|",
-                "Capacity:", capacity
+                trips, "total trips"
             ),
-        lng = ~ longitude,
-        lat = ~ latitude,
+        lng = ~ start_station_longitude,
+        lat = ~ start_station_latitude,
         radius = 4,
         stroke = FALSE,
         weight = 0,
         fillOpacity = 1,
-        fillColor = ~ capacity_viridis_pal(capacity),
+        fillColor = ~ start_trips_pal(trips),
         labelOptions = labelOptions(textsize = "1em", opacity = .9, offset = c(0, -10), direction = "top")
     )
 
@@ -285,7 +285,7 @@ for (i in 1:nrow(trips_count_start)) {
     
     # Defining palette for trip counts, filtered by start station
     
-    trips_viridis_pal <- 
+    end_trips_pal <- 
         colorNumeric(
             viridis(128, option = "D"), 
             trips_count_start_end %>% 
@@ -312,7 +312,7 @@ for (i in 1:nrow(trips_count_start)) {
             stroke = FALSE,
             weight = 0,
             fillOpacity = 1,
-            fillColor = ~ trips_viridis_pal(trips),
+            fillColor = ~ end_trips_pal(trips),
             label =
                 ~ paste(
                     end_station_name,
