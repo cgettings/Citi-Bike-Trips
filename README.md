@@ -75,4 +75,8 @@ This map displays Citi Bike trips taken in April of 2019. The default layer disp
 
 ([`code`](code/station_trips_leaflet.R))
 
+---
+**TODO:**
 
+* Click on stations to change focus without having to clear map first
+---
