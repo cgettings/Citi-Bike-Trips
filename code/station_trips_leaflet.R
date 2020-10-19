@@ -47,13 +47,13 @@ citibike_trip_db <- dbConnect(SQLite(), "data/citibike_trip_db.sqlite3")
 
 # Specifying year and month filters
 
-set.seed(726)
-
 trips <-
     citibike_trip_db %>%
     tbl("citibike_trips") %>%
     filter(year == 2019, month == 4) %>%
     select(
+        year,
+        month,
         bike_id,
         trip_duration,
         start_time,
@@ -68,7 +68,7 @@ trips <-
         end_station_latitude
     ) %>%
     collect() %>%
-    # filter(start_station_id %in% sample(unique(start_station_id), 100)) %>% 
+    # filter(start_station_id %in% unique(start_station_id)[1:10]) %>%
     mutate(
         start_time = as_datetime(start_time, tz = "US/Eastern"),
         end_time   = as_datetime(end_time,  tz = "US/Eastern")) %>%
@@ -105,6 +105,8 @@ station_info <-
 start_end_stations <- 
     trips %>% 
     distinct(
+        year,
+        month,
         start_station_id,
         start_station_name,
         start_station_longitude,
@@ -120,6 +122,8 @@ start_end_stations <-
 trips_count_start_end <- 
     trips %>% 
     count(
+        year,
+        month,
         start_station_id,
         end_station_id,
         name = "trips"
@@ -127,9 +131,10 @@ trips_count_start_end <-
     left_join(
         .,
         start_end_stations,
-        by = c("start_station_id", "end_station_id")
+        by = c("year", "month", "start_station_id", "end_station_id")
     ) %>% 
-    arrange(trips)
+    arrange(year, month, trips) %>% 
+    mutate(start_end_id = str_c(start_station_id, "_", end_station_id))
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
@@ -141,6 +146,8 @@ trips_count_start_end <-
 start_stations <- 
     trips %>% 
     distinct(
+        year,
+        month,
         start_station_id,
         start_station_name,
         start_station_longitude,
@@ -152,15 +159,17 @@ start_stations <-
 trips_count_start <-
     trips %>%
     count(
+        year,
+        month,
         start_station_id,
         name = "trips"
     ) %>% 
     left_join(
         .,
         start_stations,
-        by = "start_station_id"
+        by = c("year", "month", "start_station_id")
     ) %>% 
-    arrange(trips)
+    arrange(year, month, trips)
 
 
 #=========================================================================================#
@@ -212,15 +221,19 @@ source(here("code/functions/addEasyButtonNoFaDeps.R"))
 # Constructing map
 #-----------------------------------------------------------------------------------------#
 
-show_station_group_on_click_js <- read_file(here("code/js/show_station_group_on_click.js"))
-
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# defining color palette
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 
 start_trips_pal <-
     colorNumeric(
-        viridis(128, option = "E"),
+        viridis(128, option = "D"),
         trips_count_start %>% pull(trips)
     )
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# Base map and "all stations" markers
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 
 stations_map <- 
     
@@ -242,8 +255,6 @@ stations_map <-
         options = list("padding" = c(5, 5))
     ) %>%
     
-    # setView(lng = -73.925380, lat = 40.736118, zoom = 12) %>%
-    
     enableTileCaching() %>%
     
     addProviderTiles(
@@ -260,7 +271,7 @@ stations_map <-
         label =
             ~ paste(
                 start_station_name,
-                "|",
+                " - ",
                 trips, "total trips"
             ),
         lng = ~ start_station_longitude,
@@ -270,7 +281,7 @@ stations_map <-
         weight = 0,
         fillOpacity = 1,
         fillColor = ~ start_trips_pal(trips),
-        labelOptions = labelOptions(textsize = "1em", opacity = .9, offset = c(0, -10), direction = "top")
+        labelOptions = labelOptions(textsize = "1.1em", opacity = .9, offset = c(0, -10), direction = "top")
     )
 
 
@@ -281,7 +292,6 @@ stations_map <-
 # Looping over start stations
 
 for (i in 1:nrow(trips_count_start)) {
-# for (i in 1:100) {
     
     # Defining palette for trip counts, filtered by start station
     
@@ -306,6 +316,7 @@ for (i in 1:nrow(trips_count_start)) {
                 filter(start_station_id == !!trips_count_start$start_station_id[i]),
             
             group = trips_count_start$start_station_name[i],
+            layerId = ~ start_end_id,
             lng = ~ end_station_longitude,
             lat = ~ end_station_latitude,
             radius = 4,
@@ -316,10 +327,10 @@ for (i in 1:nrow(trips_count_start)) {
             label =
                 ~ paste(
                     end_station_name,
-                    "|",
+                    " - ",
                     trips, "trips"
                 ),
-            labelOptions = labelOptions(textsize = "15px", opacity = .9, offset = c(0, -10), direction = "top")
+            labelOptions = labelOptions(textsize = "1.1em", opacity = .9, offset = c(0, -10), direction = "top")
         ) %>% 
         
         # Start station markers
@@ -330,6 +341,7 @@ for (i in 1:nrow(trips_count_start)) {
                 filter(start_station_id == !!trips_count_start$start_station_id[i]),
             
             group = trips_count_start$start_station_name[i],
+            layerId = ~ str_c(start_station_id, "_highlight"),
             lng = ~ start_station_longitude,
             lat = ~ start_station_latitude,
             radius = 8,
@@ -352,6 +364,12 @@ for (i in 1:nrow(trips_count_start)) {
 # Adding javascript for displaying groups on click
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 
+# reading
+
+show_station_group_on_click_js <- read_file(here("code/js/show_station_group_on_click.js"))
+
+# adding
+
 stations_map <- 
     stations_map %>% 
     
@@ -364,10 +382,14 @@ stations_map <-
             show_station_group_on_click_js,
             "}"
         ), 
-        data = trips_count_start
+        data = 
+            trips_count_start %>% 
+            select(year, month, start_station_id, start_station_name, trips) %>% 
+            mutate(start_station_id = as.character(start_station_id))
     )
 
-stations_map
+# stations_map
+
 
 #-----------------------------------------------------------------------------------------#
 # Saving map ----
@@ -376,9 +398,15 @@ stations_map
 saveWidget(
     widget = stations_map,
     file = here("docs/stations_map.html"),
-    selfcontained = TRUE
+    selfcontained = TRUE,
+    title = "Trips between Citi Bike stations, April 2019"
 )
 
-#=========================================================================================#
-# Building the map ----
-#=========================================================================================#
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# #
+# #                             ---- THIS IS THE END! ----
+# #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
