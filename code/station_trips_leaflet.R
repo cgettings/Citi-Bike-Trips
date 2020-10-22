@@ -208,9 +208,7 @@ for (i in 1:nrow(trips_count_start)) {
 
 trips_count_start_end_color <- 
     trips_count_start_end %>% 
-    mutate(colors = flatten_chr(trips_colors)) %>% 
-    group_by(start_station_name) %>% 
-    ungroup()
+    mutate(colors = flatten_chr(trips_colors))
 
 
 #-----------------------------------------------------------------------------------------#
@@ -228,6 +226,8 @@ trips_nested_list <-
     trips_count_start_end_color %>% 
     
     # initially splitting by year
+    
+    # arrange(year, month, start_station_id, trips) %>% 
     
     split(
         x = select(., -year), 
@@ -354,7 +354,7 @@ stations_map <-
     # Default base group is "all stations", with total trips
     
     addCircleMarkers(
-        data = trips_count_start,
+        data = trips_count_start %>% arrange(trips),
         group = "all_stations",
         layerId = ~ start_station_name,
         label =
