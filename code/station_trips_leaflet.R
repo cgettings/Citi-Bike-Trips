@@ -68,7 +68,6 @@ trips <-
         end_station_latitude
     ) %>%
     collect() %>%
-    # filter(start_station_id %in% unique(start_station_id)[1:10]) %>%
     mutate(
         start_time = as_datetime(start_time, tz = "US/Eastern"),
         end_time   = as_datetime(end_time,  tz = "US/Eastern")) %>%
@@ -133,8 +132,7 @@ trips_count_start_end <-
         start_end_stations,
         by = c("year", "month", "start_station_id", "end_station_id")
     ) %>% 
-    arrange(year, month, trips) %>% 
-    mutate(start_end_id = str_c(start_station_id, "_", end_station_id))
+    arrange(year, month, start_station_id, trips)
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
@@ -169,7 +167,90 @@ trips_count_start <-
         start_stations,
         by = c("year", "month", "start_station_id")
     ) %>% 
-    arrange(year, month, trips)
+    arrange(year, month, start_station_id, trips)
+
+
+#-----------------------------------------------------------------------------------------#
+# Computing trip count colors here instead of in JS on add
+#-----------------------------------------------------------------------------------------#
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# Generic palette function
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+
+end_trips_pal <- colour_ramp(colors = viridis(128), na.color = "gray30", alpha = FALSE)
+
+trips_colors <- list()
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# For each station, compute trip count colors
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+
+for (i in 1:nrow(trips_count_start)) {
+    
+    trips_colors[[i]] <-
+        trips_count_start_end %>% 
+        filter(
+            year == !!trips_count_start$year[i],
+            month == !!trips_count_start$month[i],
+            start_station_id == !!trips_count_start$start_station_id[i]
+        ) %>% 
+        pull(trips) %>% 
+        rescale() %>% 
+        end_trips_pal()
+    
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# Add colors to dataset
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+
+trips_count_start_end_color <- 
+    trips_count_start_end %>% 
+    mutate(colors = flatten_chr(trips_colors)) %>% 
+    group_by(start_station_name) %>% 
+    ungroup()
+
+
+#-----------------------------------------------------------------------------------------#
+# Converting data to nested, named list
+#-----------------------------------------------------------------------------------------#
+
+# this will make subsetting the data easier in JS, as well as reduce size of data given to JS
+# 
+# `split()` created a list with elements named after the split variable
+# 
+# end product is `trips_nested_list[year][month][start_station_name]`
+
+trips_nested_list <- 
+    
+    trips_count_start_end_color %>% 
+    
+    # initially splitting by year
+    
+    split(
+        x = select(., -year), 
+        f = .$year
+    ) %>% 
+    
+    # then within each year group, splitting by month
+    
+    map( 
+        ~ split(
+            x = select(.x, -month), 
+            f = .x$month
+        ) %>% 
+            
+            # then within each month group, splitting by station name
+            
+            map( 
+                ~ split(
+                    x = select(.x, -start_station_name), 
+                    f = .x$start_station_name
+                )
+            )
+    )
 
 
 #=========================================================================================#
@@ -179,6 +260,12 @@ trips_count_start <-
 #-----------------------------------------------------------------------------------------#
 # Adding extras
 #-----------------------------------------------------------------------------------------#
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# Reading in javascript for displaying groups on click
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+
+add_station_group_on_click_js <- read_file(here("code/js/add_station_group_on_click.js"))
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 # plugins & dependencies
@@ -247,6 +334,8 @@ stations_map <-
         )
     ) %>%
     
+    # setting initial counds based on extent of extracted data
+    
     fitBounds(
         lng1 = min(c(trips$end_station_longitude, trips$start_station_longitude)),
         lat1 = min(c(trips$end_station_latitude,  trips$start_station_latitude)),
@@ -262,7 +351,7 @@ stations_map <-
         options = tileOptions(useCache = TRUE, crossOrigin = TRUE)
     ) %>% 
     
-    # Default base group is "all stations", with station capacity
+    # Default base group is "all stations", with total trips
     
     addCircleMarkers(
         data = trips_count_start,
@@ -282,114 +371,25 @@ stations_map <-
         fillOpacity = 1,
         fillColor = ~ start_trips_pal(trips),
         labelOptions = labelOptions(textsize = "1.1em", opacity = .9, offset = c(0, -10), direction = "top")
-    )
-
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
-# Adding points for trip destination stations, for each start station
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
-
-# Looping over start stations
-
-for (i in 1:nrow(trips_count_start)) {
-    
-    # Defining palette for trip counts, filtered by start station
-    
-    end_trips_pal <- 
-        colorNumeric(
-            viridis(128, option = "D"), 
-            trips_count_start_end %>% 
-                filter(start_station_id == !!trips_count_start$start_station_id[i]) %>% 
-                pull(trips)
-        )
-    
-    
-    stations_map <- 
-        
-        stations_map %>% 
-        
-        # Color-scaled destination stations, filtered by start station
-        
-        addCircleMarkers(
-            data = 
-                trips_count_start_end %>% 
-                filter(start_station_id == !!trips_count_start$start_station_id[i]),
-            
-            group = trips_count_start$start_station_name[i],
-            layerId = ~ start_end_id,
-            lng = ~ end_station_longitude,
-            lat = ~ end_station_latitude,
-            radius = 4,
-            stroke = FALSE,
-            weight = 0,
-            fillOpacity = 1,
-            fillColor = ~ end_trips_pal(trips),
-            label =
-                ~ paste(
-                    end_station_name,
-                    " - ",
-                    trips, "trips"
-                ),
-            labelOptions = labelOptions(textsize = "1.1em", opacity = .9, offset = c(0, -10), direction = "top")
-        ) %>% 
-        
-        # Start station markers
-        
-        addCircleMarkers(
-            data = 
-                trips_count_start %>% 
-                filter(start_station_id == !!trips_count_start$start_station_id[i]),
-            
-            group = trips_count_start$start_station_name[i],
-            layerId = ~ str_c(start_station_id, "_highlight"),
-            lng = ~ start_station_longitude,
-            lat = ~ start_station_latitude,
-            radius = 8,
-            stroke = TRUE,
-            color = "white",
-            weight = 2,
-            opacity = 1,
-            fill = FALSE
-            
-        ) %>% 
-        
-        # hiding each group by default
-        
-        hideGroup(trips_count_start$start_station_name[i])
-    
-}
-
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
-# Adding javascript for displaying groups on click
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
-
-# reading
-
-show_station_group_on_click_js <- read_file(here("code/js/show_station_group_on_click.js"))
-
-# adding
-
-stations_map <- 
-    stations_map %>% 
+    ) %>% 
     
     addResetMapButtonPosition(position = "bottomleft") %>%
     registerPlugin(fa_plugin) %>%
     
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+    # Adding javascript for displaying groups on click
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+    
     onRender(
         str_c(
             "function(el, x, data) {\n",
-            show_station_group_on_click_js,
+            add_station_group_on_click_js,
             "}"
         ), 
-        data = 
-            trips_count_start %>% 
-            select(year, month, start_station_id, start_station_name, trips) %>% 
-            mutate(start_station_id = as.character(start_station_id))
+        data = trips_nested_list
     )
 
 # stations_map
-
 
 #-----------------------------------------------------------------------------------------#
 # Saving map ----
