@@ -17,10 +17,10 @@ pagetitle: NYC Citi Bike trips
             height: 100%;
             width: 100vw;
             position: fixed;
-            //top: 0px;
-            //bottom: 0px;
-            //left: 0px;
-            //right: 0px;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
         }
     </style>
 </head>
