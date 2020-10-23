@@ -18,8 +18,6 @@ pagetitle: NYC Citi Bike trips
           position: absolute;
           top: 0px;
           left: 0px;
-          //bottom: 0px;
-          //right: 0px;
       }
     </style>
 </head>
