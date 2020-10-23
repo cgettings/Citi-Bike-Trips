@@ -14,8 +14,8 @@ pagetitle: NYC Citi Bike trips
             padding: 0px;
         }
         html, body, #map {
-            height: 100vw;
-            width: 100vw;
+            height: 100%;
+            width: 100%;
             position: absolute;
             top: 0px;
             bottom: 0px;
