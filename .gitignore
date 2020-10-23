@@ -3283,3 +3283,4 @@ data/march_april_may/weather_hourly_new.rds
 data/2018/trips_station_weather_data_extra_2018_2.rds
 data/2018/trips_station_weather_data_with_0s_2018.rds
 rosm.cache
+docs/one_bike_frames.html
