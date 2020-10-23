@@ -1,3 +1,22 @@
+
+# Visualizations
+
+## Mapping trip counts with `leaflet`
+
+This map displays Citi Bike trips taken in April of 2019. The default layer displays each station in the system, along with its total trips. Clicking on a point will show the number of trips that started at that station, and how many of those trips ended at each station in the system.
+
+**See map at https://cgettings.github.io/Citi-Bike-Trips/**
+
+[`R code`](code/station_trips_leaflet.R)  
+[`JavaScript code`](code/js/add_station_group_on_click.js)  
+
+---
+**TODO:**
+
+* ~Click on stations to change focus without having to clear map first~
+* Better handling of touch screens
+---
+
 # Modeling Citi Bike trips in 2018
 
 Fitting a generalized linear mixed effects model to trip, station and weather data, starting from the raw data files.
@@ -65,20 +84,3 @@ Scatterplot heatmap using `ggplot2::geom_hex()`, with `binwidth = 1`; original p
 
 ![](plots/time_series/2018/glmmTMB_fit_m345_20s_genpois_141213/glmmTMB_fit_m345_20s_genpois_141213_fitted_heatmap.png)  
 
-# Other Visualizations
-
-## Mapping trip counts with `leaflet`
-
-This map displays Citi Bike trips taken in April of 2019. The default layer displays each station in the system, along with its total trips. Clicking on a point will show the number of trips that started at that station, and how many of those trips ended at each station in the system.
-
-**See map at https://cgettings.github.io/Citi-Bike-Trips/**
-
-[`R code`](code/station_trips_leaflet.R)  
-[`JavaScript code`](code/js/add_station_group_on_click.js)  
-
----
-**TODO:**
-
-* ~Click on stations to change focus without having to clear map first~
-* Better handling of touch screens
----
