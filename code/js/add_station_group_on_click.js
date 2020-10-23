@@ -146,7 +146,7 @@ LM.getLayerGroup('all_stations').eachLayer(all_stations_layer => {
 // each time the map is clicked, the "visible group" gets recomputed
 // the "mouseover" event here is just to make sure the process is initialized,
 //  so that the below code handles the adding of every layer, including the "all stations"
-//  layer added in R anbd already on the map when this code is evaluated
+//  layer added in R and already on the map when this code is evaluated
 
 map.on("click mouseover", function() {
     
@@ -308,8 +308,6 @@ map.on("click mouseover", function() {
                 station_point_highlight.options.layerId = selected_station_name + " highlight";
                 
                 
-                //---- changing tooltip text size ----//
-                
                 console.log("click added:", selected_station_name, added_log);
                 console.log("post-add map:", getVisibleGroups());
                 
@@ -453,7 +451,8 @@ map.on("click mouseover", function() {
 //=============================================================================//
 
 //-----------------------------------------------------------------------------//
-// easyButton to go back to the "all stations" group//-----------------------------------------------------------------------------//
+// easyButton to go back to the "all stations" group
+//-----------------------------------------------------------------------------//
 
 L.easyButton({
         position: "bottomleft",

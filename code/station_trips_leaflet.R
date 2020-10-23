@@ -227,8 +227,6 @@ trips_nested_list <-
     
     # initially splitting by year
     
-    # arrange(year, month, start_station_id, trips) %>% 
-    
     split(
         x = select(., -year), 
         f = .$year
@@ -309,7 +307,7 @@ source(here("code/functions/addEasyButtonNoFaDeps.R"))
 #-----------------------------------------------------------------------------------------#
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
-# defining color palette
+# defining color palette for "all stations" layer
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 
 start_trips_pal <-
@@ -383,13 +381,12 @@ stations_map <-
     onRender(
         str_c(
             "function(el, x, data) {\n",
-            add_station_group_on_click_js,
+            JS(add_station_group_on_click_js),
             "}"
         ), 
         data = trips_nested_list
     )
 
-# stations_map
 
 #-----------------------------------------------------------------------------------------#
 # Saving map ----
