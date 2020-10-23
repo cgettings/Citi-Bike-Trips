@@ -23,4 +23,4 @@ pagetitle: NYC Citi Bike trips
     </style>
 </head>
 
-<iframe id="map" src="docs/stations_map.html" style="border:none; background:none"> </iframe>
+<iframe id="map" src="stations_map.html" style="border:none; background:none"> </iframe>
