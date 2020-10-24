@@ -14,6 +14,7 @@ This map displays Citi Bike trips taken in April of 2019. The default layer disp
 **TODO:**
 
 * ~Click on stations to change focus without having to clear map first~
+* Add other months
 * Better handling of touch screens
 ---
 
